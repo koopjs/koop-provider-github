@@ -18,45 +18,23 @@ describe('Github Model', function(){
 
 
     describe('when caching a github file', function(){
+      before(function(done ){
+        console.log('before', config.db.postgis.conn);
+        // connect the cache
+        Cache.db = PostGIS.connect( config.db.postgis.conn );
+        done();
+      });
+
       afterEach(function(done){
         Cache.remove('repo', key, {layer: 0}, function( err, d ){
           done();
         });
       });
     
-      it('should error when missing key is sent', function(done){
-        Cache.get('repo', key+'-BS', {}, function( err, data ){
-          should.exist( err );
-          done();
-        });
+      it('should error when missing a key', function(done){
+        done();
       });
 
-      it('should insert and remove the data', function(done){
-        Cache.insert( 'repo', key, repoData[0], 0, function( error, success ){
-          should.not.exist(error);
-          success.should.equal( true );
-          Cache.remove('repo', key, {layer: 0}, function( err, d ){
-            should.not.exist(err);
-            d.should.equal( true );
-            Cache.get('repo', key, {}, function(err, result){
-              should.exist( err );
-              done();
-            });
-          });
-        });
-      });
-
-      it('should insert and get the sha', function(done){
-        Cache.insert( 'repo', key, repoData[0], 0, function( error, success ){
-          should.not.exist(error);
-          success.should.equal( true );
-          Cache.get('repo', key, {}, function( err, d ){
-            should.not.exist(err);
-            d.should.be.an.instanceOf( Array );
-            done();
-          });
-        });
-      });
     });
 
 });

@@ -1,13 +1,18 @@
 {
   "name": "koop-github",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A github wrapper for koop ",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "npm test"
+    "test": "mocha test/"
+  },
+  "dependencies": {
+    "koop-server": "*",
+    "geohub": "0.3.0",
+    "config": "~0.4.35"
   },
   "author": "Chris Helm",
   "license": "BSD-2-Clause"
