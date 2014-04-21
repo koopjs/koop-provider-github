@@ -1,0 +1,14 @@
+{
+  "name": "koop-github",
+  "version": "0.0.0",
+  "description": "A github wrapper for koop ",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "Chris Helm",
+  "license": "BSD-2-Clause"
+}
