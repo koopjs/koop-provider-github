@@ -7,10 +7,9 @@ exports.find = function( user, repo, file, options, callback ){
     type = 'Github';
   
   Cache.get( type, key, options, function(err, entry ){
-    if ( err ){
-      console.log('Data not found in cache, requesting', key);
+    if ( err){
       Geohub.repo( user, repo, file, config.github_token, function( err, geojson ){
-        if ( !geojson ){
+        if ( !geojson || err ){
           callback( 'No geojson found', null );
         } else {
 
@@ -38,7 +37,6 @@ exports.find = function( user, repo, file, options, callback ){
         }
       });
     } else {
-      console.log('Data found!, using cache', key);
       callback( null, entry );
     }
   });
