@@ -15,5 +15,8 @@
     "config": "~0.4.35"
   },
   "author": "Chris Helm",
-  "license": "BSD-2-Clause"
+  "license": "BSD-2-Clause",
+  "devDependencies": {
+    "supertest": "~0.11.0"
+  }
 }
