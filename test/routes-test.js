@@ -7,7 +7,8 @@ global.config = config;
 
 before(function (done) {
     Cache.db = PostGIS.connect( config.db.postgis.conn );
-    try { koop.register(require("../index.js")); } catch(e){ console.log('shit')}
+    try { koop.register(require("../index.js")); } catch(e){}
+    //console.log(koop)
     done(); 
 });
 
@@ -34,6 +35,17 @@ describe('Koop Routes', function(){
         });
       });
     });
+
+   /* describe('/github', function() {
+      it('should return 200', function(done) {
+        request(koop)
+          .get('/github/colemanm/hurricanes/fl_2004_hurricanes/preview')
+          .end(function(err, res){
+            res.should.have.status(200);
+            done();
+        });
+      });
+    });*/
 
     describe('/github/colemanm/hurricanes/fl_2004_hurricanes', function() {
       it('should return 200', function(done) {

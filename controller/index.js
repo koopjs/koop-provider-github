@@ -29,7 +29,7 @@ Controller.index = function(req, res){
 Controller.thumbnail = function(req, res){
   // check the image first and return if exists
   var key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-  var dir = sails.config.data_dir + '/thumbs/';
+  var dir = config.data_dir + '/thumbs/';
   req.query.width = parseInt( req.query.width ) || 150;
   req.query.height = parseInt( req.query.height ) || 150;
   req.query.f_base = dir + key + '/' + req.query.width + '::' + req.query.height;
@@ -100,7 +100,7 @@ Controller.getRepo = function(req, res){
           var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
           var key = crypto.createHash('md5').update( toHash ).digest('hex');
 
-          var fileName = [sails.config.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
+          var fileName = [config.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
           console.log(fileName)
 
           if (fs.existsSync( fileName )){
@@ -229,7 +229,7 @@ Controller.tiles = function( req, res ){
     if ( req.params.user && req.params.repo && req.params.file ){
       req.params.file = req.params.file.replace('.geojson', '');
       key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-      var file = sails.config.data_dir + 'tiles/';
+      var file = config.data_dir + 'tiles/';
         file += key + ':' + layer + '/' + req.params.format;
         file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
       
@@ -241,7 +241,7 @@ Controller.tiles = function( req, res ){
 
     } else if ( req.params.user && req.params.repo ) {
       key = ['github', req.params.user, req.params.repo].join(':');
-      var file = sails.config.data_dir + 'tiles/';
+      var file = config.data_dir + 'tiles/';
         file += key + ':' + layer + '/' + req.params.format;
         file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
 

@@ -55,19 +55,10 @@ module.exports = {
     action: 'featureservice'
   },
 
-  'get /github/:user/:repo/:file/preview' : {
-    controller  : 'github',
-    action: 'preview'
-  },
 
   'get /github/:user/:repo/:file/thumbnail' : {
     controller  : 'github',
     action: 'thumbnail'
-  },
-
-  'get /github/:user/:repo/:file/tiles/preview' : {
-    controller  : 'github',
-    action: 'tile_preview'
   },
 
   'get /github/:user/:repo/:file/tiles/:z/:x/:y.:format': { 
