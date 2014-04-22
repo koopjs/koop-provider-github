@@ -23,7 +23,7 @@ Controller.Error = function(req, res){
 
 // renders an empty map with a text input 
 Controller.index = function(req, res){
-  res.render('github/index');
+  res.render(__dirname + '/../views/index');
 };
 
 Controller.thumbnail = function(req, res){
@@ -156,7 +156,7 @@ Controller.featureservice = function(req, res){
 // renders views/demo/github 
 Controller.preview = function(req, res){
    req.params.file = req.params.file.replace('.geojson', '');
-   res.render('demo/github', { locals:{ user: req.params.user, repo: req.params.repo, file: req.params.file } });
+   res.render(__dirname + '/../views/demo', { locals:{ user: req.params.user, repo: req.params.repo, file: req.params.file } });
 };
 
 // Handle the tile preview route

@@ -5,6 +5,11 @@ module.exports = {
     action: 'index'
   },
 
+  'get /github': {
+    controller: 'github',
+    action: 'index'
+  },
+
   'get /github/:user': {
     controller: 'github',
     action: 'notFound'
@@ -38,6 +43,11 @@ module.exports = {
   'get /github/:user/:repo/:file': {
     controller: 'github',
     action: 'getRepo'
+  },
+
+  'get /github/:user/:repo/:file/preview': {
+    controller: 'github',
+    action: 'preview'
   },
 
   'get /github/:user/:repo/:file/FeatureServer': {
