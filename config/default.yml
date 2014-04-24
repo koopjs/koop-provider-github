@@ -2,5 +2,3 @@
 db:
   postgis:
     conn: "postgres://localhost/koopdev"
-
-github_token: 'YOUR GH API KEY'
