@@ -7,8 +7,8 @@ global.config = config;
 
 before(function (done) {
     Cache.db = PostGIS.connect( config.db.postgis.conn );
-    try { koop.register(require("../index.js")); } catch(e){}
-    //console.log(koop)
+    try { koop.register(require("../index.js")); } catch(e){ console.log('wtf', e); }
+    console.log(koop)
     done(); 
 });
 
@@ -19,13 +19,14 @@ describe('Koop Routes', function(){
         request(koop)
           .get('/github/colemanm/hurricanes/fl_2004_hurricanes')
           .end(function(err, res){
+            console.log(res.status)
             res.should.have.status(200);
             done();
           });
       });
     });
 
-    describe('/github/blarg/', function() {
+    /*describe('/github/blarg/', function() {
       it('should return 404', function(done) {
         request(koop)
           .get('/github/blarg')
@@ -36,7 +37,7 @@ describe('Koop Routes', function(){
       });
     });
 
-   /* describe('/github', function() {
+    describe('/github/preview', function() {
       it('should return 200', function(done) {
         request(koop)
           .get('/github/colemanm/hurricanes/fl_2004_hurricanes/preview')
@@ -45,7 +46,7 @@ describe('Koop Routes', function(){
             done();
         });
       });
-    });*/
+    });
 
     describe('/github/colemanm/hurricanes/fl_2004_hurricanes', function() {
       it('should return 200', function(done) {
@@ -89,7 +90,7 @@ describe('Koop Routes', function(){
             done();
         });
       });
-    });
+    });*/
 
 });
 
