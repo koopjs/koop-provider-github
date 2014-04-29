@@ -95,6 +95,9 @@ Controller.getRepo = function(req, res){
             });
           });
         } else if ( req.params.format ) {
+          // change geojson to json
+          req.params.format = req.params.format.replace('geojson', 'json'); 
+
           var dir = ['github', req.params.user, req.params.repo, req.params.file].join(':');
           // build the file key as an MD5 hash that's a join on the paams and look for the file 
           var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
