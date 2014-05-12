@@ -191,8 +191,7 @@ Controller.tiles = function( req, res ){
           req.params.style = req.query.style;
         }
         Tiles.get( req.params, data[ layer ], function(err, tile){
-          if ( req.params.format == 'png'){
-            //res.contentType('image/png');
+          if ( req.params.format == 'png' || req.params.format == 'pbf' ){
             res.sendfile( tile );
           } else {
             if ( callback ){
