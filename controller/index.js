@@ -191,13 +191,13 @@ Controller.tiles = function( req, res ){
           req.params.style = req.query.style;
         }
         Tiles.get( req.params, data[ layer ], function(err, tile){
-          if ( req.params.format == 'png' || req.params.format == 'pbf' ){
+          if ( req.params.format == 'png' || req.params.format == 'pbf'){
             res.sendfile( tile );
           } else {
             if ( callback ){
               res.send( callback + '(' + JSON.stringify( tile ) + ')' );
             } else {
-              res.json( tile );
+              res.json(  JSON.parse( fs.readFileSync( tile ) ) );
             }
           }
         });
