@@ -215,14 +215,14 @@ Controller.tiles = function( req, res ){
     };
 
     var _sendImmediate = function( file ){
-      if ( req.params.format == 'png'){
+      if ( req.params.format == 'png' || req.params.format == 'pbf'){
         res.sendfile( file );
       } else {
         fs.readFile(file, function(err, data){
           if ( callback ){
             res.send( callback + '(' + data + ')' );
           } else {
-            res.json( JSON.parse( data ) );
+            res.json( data );
           }
         })
       }
