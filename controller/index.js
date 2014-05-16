@@ -197,7 +197,7 @@ Controller.tiles = function( req, res ){
             if ( callback ){
               res.send( callback + '(' + JSON.stringify( tile ) + ')' );
             } else {
-              res.json(  JSON.parse( fs.readFileSync( tile ) ) );
+              res.json( tile );
             }
           }
         });
@@ -220,9 +220,9 @@ Controller.tiles = function( req, res ){
       } else {
         fs.readFile(file, function(err, data){
           if ( callback ){
-            res.send( callback + '(' + data + ')' );
+            res.send( callback + '(' + JSON.parse(data) + ')' );
           } else {
-            res.json( data );
+            res.json( JSON.parse(data) );
           }
         })
       }
