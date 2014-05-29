@@ -10,7 +10,7 @@
     "test": "mocha test/"
   },
   "dependencies": {
-    "koop-server": "*",
+    "koop-server": "https://github.com/Esri/koop-server/tarball/master",
     "geohub": "0.3.0",
     "config": "~0.4.35",
     "ejs": "~1.0.0",
