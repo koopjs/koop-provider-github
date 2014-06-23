@@ -28,6 +28,9 @@ exports.find = function( user, repo, file, options, callback ){
           };
 
           geojson.forEach(function(layer, i){
+            if (!layer.name) { 
+              layer.name = file.replace('.geojson','');
+            }
             Cache.insert( type, key, layer, i, function( err, success){
               if ( success ) {
                 _send(layer);

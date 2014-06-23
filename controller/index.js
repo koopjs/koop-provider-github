@@ -186,6 +186,7 @@ Controller.tiles = function( req, res ){
       layer = req.params.layer || 0;
 
     var _send = function( err, data ){
+        //console.log('Data', data[0].name.replace('.geojson', ''));
         req.params.key = key + ':' + layer;
         if (req.query.style){
           req.params.style = req.query.style;
