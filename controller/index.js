@@ -196,7 +196,11 @@ Controller.tiles = function( req, res ){
             if ( callback ){
               res.send( callback + '(' + JSON.stringify( tile ) + ')' );
             } else {
-              res.json( tile );
+              if (typeof tile == 'string'){
+                res.sendfile( tile );
+              } else {              
+                res.json( tile );
+              }
             }
           }
         });
@@ -233,8 +237,13 @@ Controller.tiles = function( req, res ){
       var file = config.data_dir + 'tiles/';
         file += key + ':' + layer + '/' + req.params.format;
         file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
-      
-      if ( !fs.existsSync( file ) ) {
+
+      var jsonFile = file.replace(/png|pbf|utf/g, 'json');
+
+      // if the json file alreadty exists, dont hit the db, just send the data
+      if (fs.existsSync(jsonFile) && !fs.existsSync( file ) ){
+        _send( null, fs.readFileSync( jsonFile ) );
+      } else if ( !fs.existsSync( file ) ) {
         Github.find(req.params.user, req.params.repo, req.params.file, req.query, _send );
       } else {
         _sendImmediate(file);
@@ -246,7 +255,12 @@ Controller.tiles = function( req, res ){
         file += key + ':' + layer + '/' + req.params.format;
         file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
 
-      if ( !fs.existsSync( file ) ) {
+      var jsonFile = file.replace(/png|pbf|utf/g, 'json');
+
+      // if the json file alreadty exists, dont hit the db, just send the data
+      if (fs.existsSync(jsonFile) && !fs.existsSync( file ) ){
+        _send( null, [jsonFile] );
+      } else if ( !fs.existsSync( file ) ) {
         Github.find(req.params.user, req.params.repo, null, req.query, _send );
       } else {
         _sendImmediate(file);
