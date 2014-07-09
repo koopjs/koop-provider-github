@@ -95,26 +95,30 @@ Controller.getRepo = function(req, res){
             });
           });
         } else if ( req.params.format ) {
-          // change geojson to json
-          req.params.format = req.params.format.replace('geojson', 'json'); 
-
-          var dir = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-          // build the file key as an MD5 hash that's a join on the paams and look for the file 
-          var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
-          var key = crypto.createHash('md5').update( toHash ).digest('hex');
-
-          var fileName = [config.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
-
-          if (fs.existsSync( fileName )){
-            res.sendfile( fileName );
+          if ( req.params.format ){
+            Controller.thumbnail(req, res);
           } else {
-            Exporter.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
-              if (err){
-                res.send(err, 500);
-              } else {
-                res.sendfile( file );
-              }
-            });
+            // change geojson to json
+            req.params.format = req.params.format.replace('geojson', 'json'); 
+
+            var dir = ['github', req.params.user, req.params.repo, req.params.file].join(':');
+            // build the file key as an MD5 hash that's a join on the paams and look for the file 
+            var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
+            var key = crypto.createHash('md5').update( toHash ).digest('hex');
+
+            var fileName = [config.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
+
+            if (fs.existsSync( fileName )){
+              res.sendfile( fileName );
+            } else {
+              Exporter.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
+                if (err){
+                  res.send(err, 500);
+                } else {
+                  res.sendfile( file );
+                }
+              });
+            }
           }
         } else {
           res.json( data );
