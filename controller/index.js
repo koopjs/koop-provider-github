@@ -95,7 +95,7 @@ Controller.getRepo = function(req, res){
             });
           });
         } else if ( req.params.format ) {
-          if ( req.params.format ){
+          if ( req.params.format == 'png'){
             Controller.thumbnail(req, res);
           } else {
             // change geojson to json
