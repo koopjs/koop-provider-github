@@ -76,18 +76,19 @@ Controller.getRepo = function(req, res){
 
     // method to respond to model finds
     var _send = function( err, data ){
-      var len = data.length;
-      var allTopojson = [];
-      var processTopojson = function( topology ){
-        allTopojson.push(topology);
-        if ( allTopojson.length == len ) {
-          res.json( allTopojson[0] );
-        }
-      };
-
       if ( err ){
         res.json( err, 500 );
       } else if ( data ){
+      
+        var len = data.length;
+        var allTopojson = [];
+        var processTopojson = function( topology ){
+          allTopojson.push(topology);
+          if ( allTopojson.length == len ) {
+            res.json( allTopojson[0] );
+          }
+        };
+
         if ( req.query.topojson ){ 
           data.forEach(function( d ){
             Topojson.convert(d, function(err, topology){
