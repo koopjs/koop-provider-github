@@ -1,0 +1,2 @@
+// add your API Key and cp this file to config.js 
+exports.token = "XXXXXXXXXXXXXXXXXXXXXXX";

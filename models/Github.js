@@ -1,5 +1,7 @@
 var Geohub = require('geohub');
 
+var config = require('./config');
+
 exports.find = function( user, repo, file, options, callback ){
   file = ( file ) ? file.replace(/::/g, '/') : null;
 
@@ -8,7 +10,7 @@ exports.find = function( user, repo, file, options, callback ){
   
   Cache.get( type, key, options, function(err, entry ){
     if ( err){
-      Geohub.repo( user, repo, file, config.github_token, function( err, geojson ){
+      Geohub.repo( user, repo, file, config.token, function( err, geojson ){
         if ( !geojson || err ){
           callback( 'No geojson found', null );
         } else {
@@ -54,12 +56,12 @@ exports.find = function( user, repo, file, options, callback ){
   var repo = key.shift();
   var path = key.join('/') + '.geojson';
 
-  Geohub.repoSha(user, repo, path, config.github_token, function(err, sha){
+  Geohub.repoSha(user, repo, path, config.token, function(err, sha){
     
     if ( sha == json[0].sha ){
       callback(null, false);
     } else {
-      Geohub.repo( user, repo, path, config.github_token, function( err, geojson ){
+      Geohub.repo( user, repo, path, config.token, function( err, geojson ){
         callback(null, geojson );
       });
     }
