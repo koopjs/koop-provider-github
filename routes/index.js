@@ -1,84 +1,18 @@
 module.exports = {
-  
-  'get /github/': {
-    controller: 'github',
-    action: 'index'
-  },
-
-  'get /github': {
-    controller: 'github',
-    action: 'index'
-  },
-
-  'get /github/:user': {
-    controller: 'github',
-    action: 'notFound'
-  },
-
-  'get /github/:user/:repo': {
-    controller: 'github',
-    action: 'getRepo'
-  },
-
-  'get /github/:user/:repo/FeatureServer': {
-    controller: 'github',
-    action: 'featureservice'
-  },
-
-  'get /github/:user/:repo/FeatureServer/:layer': {
-    controller: 'github',
-    action: 'featureservice'
-  },
-
-  'get /github/:user/:repo/FeatureServer/:layer/:method': {
-    controller: 'github',
-    action: 'featureservice'
-  },
-
-  'get /github/:user/:repo/:file.:format': {
-    controller: 'github',
-    action: 'getRepo'
-  },
-
-  'get /github/:user/:repo/:file': {
-    controller: 'github',
-    action: 'getRepo'
-  },
-
-  'get /github/:user/:repo/:file/preview': {
-    controller: 'github',
-    action: 'preview'
-  },
-
-  'get /github/:user/:repo/:file/FeatureServer': {
-    controller: 'github',
-    action: 'featureservice'
-  },
-
-  'get /github/:user/:repo/:file/FeatureServer/:layer': {
-    controller: 'github',
-    action: 'featureservice'
-  },
-
-  'get /github/:user/:repo/:file/FeatureServer/:layer/:method': {
-    controller: 'github',
-    action: 'featureservice'
-  },
-
-
-  'get /github/:user/:repo/:file/thumbnail' : {
-    controller  : 'github',
-    action: 'thumbnail'
-  },
-
-  'get /github/:user/:repo/:file/tiles/:z/:x/:y.:format': { 
-    controller : 'github',
-    action: 'tiles'
-  },
-
-  'get /github/:user/:repo/:file/:layer/tiles/:z/:x/:y.:format': { 
-    controller : 'github',
-    action: 'tiles'
-  }
-
+  'get /github/': 'index',
+  'get /github': 'index',
+  'get /github/:user': 'notFound',
+  'get /github/:user/:repo': 'getRepo',
+  'get /github/:user/:repo/FeatureServer': 'featureservice',
+  'get /github/:user/:repo/FeatureServer/:layer': 'featureservice',
+  'get /github/:user/:repo/FeatureServer/:layer/:method': 'featureservice',
+  'get /github/:user/:repo/:file.:format': 'getRepo',
+  'get /github/:user/:repo/:file': 'getRepo',
+  'get /github/:user/:repo/:file/preview': 'preview',
+  'get /github/:user/:repo/:file/FeatureServer': 'featureservice',
+  'get /github/:user/:repo/:file/FeatureServer/:layer': 'featureservice',
+  'get /github/:user/:repo/:file/FeatureServer/:layer/:method': 'featureservice',
+  'get /github/:user/:repo/:file/thumbnail' : 'thumbnail',
+  'get /github/:user/:repo/:file/tiles/:z/:x/:y.:format': 'tiles',
+  'get /github/:user/:repo/:file/:layer/tiles/:z/:x/:y.:format': 'tiles'
 }
