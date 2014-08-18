@@ -1,10 +1,15 @@
-var Geohub = require('geohub');
+var Geohub = require('geohub'),
+  BaseModel = require('koop-server/lib/BaseModel.js');
 
 var config = require('./config');
 
+
 var Github = function( koop ){
 
-  this.find = function( user, repo, file, options, callback ){
+  var github = {};
+  github.__proto__ = BaseModel( koop );
+  
+  github.find = function( user, repo, file, options, callback ){
     file = ( file ) ? file.replace(/::/g, '/') : null;
   
     var key = [ user, repo, file].join('/'),
@@ -51,7 +56,7 @@ var Github = function( koop ){
   
   // compares the sha on the cached data and the hosted data
   // this method name is special reserved name that will get called by the cache model
-  /*exports.checkCache = function(key, data, options, callback){
+  /*github.checkCache = function(key, data, options, callback){
     var json = data;
     key = key.split('/');
     var user = key.shift();
@@ -70,27 +75,7 @@ var Github = function( koop ){
     });
   };*/
 
-  this.cacheDir = function(){
-    return koop.Cache.data_dir;
-  };
-
-  this.generateThumbnail = function( data, key, options, callback ){
-    koop.Thumbnail.generate( data, key, options, callback );
-  };
-
-  this.thumbnailExists = function( key, options ){
-    return koop.Thumbnail.exists( key, options );
-  };
-
-  this.exportToFormat = function(format, dir, key, data, options, callback){
-    koop.exporter.exportToFormat(format, dir, key, data, options, callback);
-  }
-
-  this.tilesGet = function(params, data, callback){
-    koop.Tiles.get( params, data, callback );
-  };
-
-  return this;
+  return github;
 
 };
 
