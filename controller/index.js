@@ -78,6 +78,7 @@ var Controller = function( koop ){
       var _send = function( err, data ){
         if ( err ){
           res.json( err, 500 );
+          return
         } else if ( data ){
         
           var len = data.length;

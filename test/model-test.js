@@ -1,16 +1,18 @@
 var should = require('should'),
   config = require('config'),
-  koopserver = require('koop-server')(config); 
-
-global.config = config;
+  koop = require('koop-server/lib');
 
 var repo = 'geodata',
   user = 'chelm',
   file = 'co-river-basin';
   key = [repo, user, file].join('/');
 
-before(function (done) {
-  global['Github'] = require('../models/Github.js');
+before(function(done){
+  // setup koop 
+  koop.Cache.db = koop.PostGIS.connect( config.db.postgis.conn );
+  var data_dir = __dirname + '/output/';
+  koop.Cache.data_dir = data_dir;
+  Github = new require('../models/Github.js')( koop );
   done();
 });
 
@@ -18,11 +20,6 @@ describe('Github Model', function(){
 
 
     describe('when caching a github file', function(){
-      before(function(done ){
-        // connect the cache
-        Cache.db = PostGIS.connect( config.db.postgis.conn );
-        done();
-      });
 
       afterEach(function(done){
         done();
