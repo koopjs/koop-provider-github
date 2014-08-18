@@ -29,7 +29,7 @@ var Controller = function( koop ){
   this.thumbnail = function(req, res){
     // check the image first and return if exists
     var key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-    var dir = config.data_dir + '/thumbs/';
+    var dir = koop.Cache.data_dir + '/thumbs/';
     req.query.width = parseInt( req.query.width ) || 150;
     req.query.height = parseInt( req.query.height ) || 150;
     req.query.f_base = dir + key + '/' + req.query.width + '::' + req.query.height;
@@ -39,7 +39,7 @@ var Controller = function( koop ){
          res.json( err, 500 );
        } else if ( data ){
           // generate a thumbnail
-          Thumbnail.generate( data[0], key, req.query, function(err, file){
+          koop.Thumbnail.generate( data[0], key, req.query, function(err, file){
             if (err){
               res.send(err, 500);
             } else {
@@ -54,7 +54,7 @@ var Controller = function( koop ){
     };
   
   
-    var fileName = Thumbnail.exists(key, req.query);
+    var fileName = koop.Thumbnail.exists(key, req.query);
     if ( fileName ){
       res.sendfile( fileName );
     } else {
@@ -98,7 +98,7 @@ var Controller = function( koop ){
             });
           } else if ( req.params.format ) {
             if ( req.params.format == 'png'){
-              Controller.thumbnail(req, res);
+              res.redirect(req.url.replace('.png', '')+'/thumbnail');
             } else {
               // change geojson to json
               req.params.format = req.params.format.replace('geojson', 'json'); 
@@ -108,12 +108,12 @@ var Controller = function( koop ){
               var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
               var key = crypto.createHash('md5').update( toHash ).digest('hex');
   
-              var fileName = [config.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
+              var fileName = [koop.Cache.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
   
               if (fs.existsSync( fileName )){
                 res.sendfile( fileName );
               } else {
-                Exporter.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
+                koop.exporter.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
                   if (err){
                     res.send(err, 500);
                   } else {
@@ -195,7 +195,7 @@ var Controller = function( koop ){
           if (req.query.style){
             req.params.style = req.query.style;
           }
-          Tiles.get( req.params, data[ layer ], function(err, tile){
+          koop.Tiles.get( req.params, data[ layer ], function(err, tile){
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
               res.sendfile( tile );
             } else {
@@ -240,7 +240,7 @@ var Controller = function( koop ){
       if ( req.params.user && req.params.repo && req.params.file ){
         req.params.file = req.params.file.replace('.geojson', '');
         key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-        var file = config.data_dir + 'tiles/';
+        var file = koop.Cache.data_dir + 'tiles/';
           file += key + ':' + layer + '/' + req.params.format;
           file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
   
@@ -257,7 +257,7 @@ var Controller = function( koop ){
   
       } else if ( req.params.user && req.params.repo ) {
         key = ['github', req.params.user, req.params.repo].join(':');
-        var file = config.data_dir + 'tiles/';
+        var file = koop.Cache.data_dir + 'tiles/';
           file += key + ':' + layer + '/' + req.params.format;
           file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
   
