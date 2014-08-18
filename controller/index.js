@@ -1,13 +1,11 @@
 var sm = require('sphericalmercator'),
-  extend = require('node.extend'),
   merc = new sm({size:256}),
   crypto = require('crypto'),
+  BaseController = require('koop-server/lib/Controller.js'),
   fs = require('fs');
 
 // inherit from base controller
-var Controller = function( koop ){
-
-  this.Github = Github = new require('../models/Github.js')( koop );
+var Controller = function( Github ){
 
   // general helper for not found repos
   this.notFound = function(req, res){
@@ -29,7 +27,7 @@ var Controller = function( koop ){
   this.thumbnail = function(req, res){
     // check the image first and return if exists
     var key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-    var dir = koop.Cache.data_dir + '/thumbs/';
+    var dir = Github.cacheDir() + '/thumbs/';
     req.query.width = parseInt( req.query.width ) || 150;
     req.query.height = parseInt( req.query.height ) || 150;
     req.query.f_base = dir + key + '/' + req.query.width + '::' + req.query.height;
@@ -39,7 +37,7 @@ var Controller = function( koop ){
          res.json( err, 500 );
        } else if ( data ){
           // generate a thumbnail
-          koop.Thumbnail.generate( data[0], key, req.query, function(err, file){
+          Github.generateThumbnail( data[0], key, req.query, function(err, file){
             if (err){
               res.send(err, 500);
             } else {
@@ -54,7 +52,7 @@ var Controller = function( koop ){
     };
   
   
-    var fileName = koop.Thumbnail.exists(key, req.query);
+    var fileName = Github.thumbnailExists(key, req.query);
     if ( fileName ){
       res.sendfile( fileName );
     } else {
@@ -108,12 +106,12 @@ var Controller = function( koop ){
               var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
               var key = crypto.createHash('md5').update( toHash ).digest('hex');
   
-              var fileName = [koop.Cache.data_dir + 'files', dir, key + '.' + req.params.format].join('/');
+              var fileName = [Github.cacheDir() + 'files', dir, key + '.' + req.params.format].join('/');
   
               if (fs.existsSync( fileName )){
                 res.sendfile( fileName );
               } else {
-                koop.exporter.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
+                Github.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
                   if (err){
                     res.send(err, 500);
                   } else {
@@ -147,12 +145,12 @@ var Controller = function( koop ){
         req.params.file = req.params.file.replace('.geojson', '');
         Github.find( req.params.user, req.params.repo, req.params.file, req.query, function( err, data){
           delete req.query.geometry;
-          koop.Controller._processFeatureServer( req, res, err, data, callback);
+          BaseController._processFeatureServer( req, res, err, data, callback);
         });
       } else if ( req.params.user && req.params.repo && !req.params.file ) {
         Github.find( req.params.user, req.params.repo, null, req.query, function( err, data){
           delete req.query.geometry;
-          koop.Controller._processFeatureServer( req, res, err, data, callback);
+          BaseController._processFeatureServer( req, res, err, data, callback);
         });
       } else {
         this.notFound(req, res);
@@ -195,7 +193,7 @@ var Controller = function( koop ){
           if (req.query.style){
             req.params.style = req.query.style;
           }
-          koop.Tiles.get( req.params, data[ layer ], function(err, tile){
+          Github.tilesGet(req.params, data[ layer ], function(err, tile){
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
               res.sendfile( tile );
             } else {
@@ -240,7 +238,7 @@ var Controller = function( koop ){
       if ( req.params.user && req.params.repo && req.params.file ){
         req.params.file = req.params.file.replace('.geojson', '');
         key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-        var file = koop.Cache.data_dir + 'tiles/';
+        var file = Github.cacheDir() + 'tiles/';
           file += key + ':' + layer + '/' + req.params.format;
           file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
   
@@ -257,7 +255,7 @@ var Controller = function( koop ){
   
       } else if ( req.params.user && req.params.repo ) {
         key = ['github', req.params.user, req.params.repo].join(':');
-        var file = koop.Cache.data_dir + 'tiles/';
+        var file = Github.cacheDir() + 'tiles/';
           file += key + ':' + layer + '/' + req.params.format;
           file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
   

@@ -70,6 +70,26 @@ var Github = function( koop ){
     });
   };*/
 
+  this.cacheDir = function(){
+    return koop.Cache.data_dir;
+  };
+
+  this.generateThumbnail = function( data, key, options, callback ){
+    koop.Thumbnail.generate( data, key, options, callback );
+  };
+
+  this.thumbnailExists = function( key, options ){
+    return koop.Thumbnail.exists( key, options );
+  };
+
+  this.exportToFormat = function(format, dir, key, data, options, callback){
+    koop.exporter.exportToFormat(format, dir, key, data, options, callback);
+  }
+
+  this.tilesGet = function(params, data, callback){
+    koop.Tiles.get( params, data, callback );
+  };
+
   return this;
 
 };
