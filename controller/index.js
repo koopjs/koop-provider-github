@@ -1,30 +1,33 @@
 var sm = require('sphericalmercator'),
   merc = new sm({size:256}),
   crypto = require('crypto'),
-  BaseController = require('koop-server/lib/Controller.js'),
+  BaseController = require('koop-server/lib/BaseController.js'),
   fs = require('fs');
 
 // inherit from base controller
 var Controller = function( Github ){
 
+  var controller = {};
+  controller.__proto__ = BaseController( );
+
   // general helper for not found repos
-  this.notFound = function(req, res){
+  controller.notFound = function(req, res){
     res.send('Must specify a user, repo, and file', 404);
   };
   
   
   // general helper for error'd requests
-  this.Error = function(req, res){
+  controller.Error = function(req, res){
     res.send('There was a problem accessing this repo', 500);
   };
   
   
   // renders an empty map with a text input 
-  this.index = function(req, res){
+  controller.index = function(req, res){
     res.render(__dirname + '/../views/index');
   };
   
-  this.thumbnail = function(req, res){
+  controller.thumbnail = function(req, res){
     // check the image first and return if exists
     var key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
     var dir = Github.cacheDir() + '/thumbs/';
@@ -69,7 +72,7 @@ var Controller = function( Github ){
   };
   
   // 
-  this.getRepo = function(req, res){
+  controller.getRepo = function(req, res){
       var key = ['github'];
   
       // method to respond to model finds
@@ -137,7 +140,7 @@ var Controller = function( Github ){
       }
   };
   
-  this.featureservice = function(req, res){
+  controller.featureservice = function(req, res){
       var callback = req.query.callback, self = this;
       delete req.query.callback;
   
@@ -145,12 +148,12 @@ var Controller = function( Github ){
         req.params.file = req.params.file.replace('.geojson', '');
         Github.find( req.params.user, req.params.repo, req.params.file, req.query, function( err, data){
           delete req.query.geometry;
-          BaseController._processFeatureServer( req, res, err, data, callback);
+          controller.processFeatureServer( req, res, err, data, callback);
         });
       } else if ( req.params.user && req.params.repo && !req.params.file ) {
         Github.find( req.params.user, req.params.repo, null, req.query, function( err, data){
           delete req.query.geometry;
-          BaseController._processFeatureServer( req, res, err, data, callback);
+          controller.processFeatureServer( req, res, err, data, callback);
         });
       } else {
         this.notFound(req, res);
@@ -160,18 +163,18 @@ var Controller = function( Github ){
   
   // Handle the preview route 
   // renders views/demo/github 
-  this.preview = function(req, res){
+  controller.preview = function(req, res){
      req.params.file = req.params.file.replace('.geojson', '');
      res.render(__dirname + '/../views/demo', { locals:{ user: req.params.user, repo: req.params.repo, file: req.params.file } });
   };
   
   // Handle the tile preview route
-  this.tile_preview = function(req, res){
+  controller.tile_preview = function(req, res){
      req.params.file = req.params.file.replace('.geojson', '');
      res.render('demo/github_tiles', { locals:{ user: req.params.user, repo: req.params.repo, file: req.params.file } });
   };
   
-  this.topojson_preview = function(req, res){
+  controller.topojson_preview = function(req, res){
       req.params.file = req.params.file.replace('.geojson', '');
       res.render('demo/github_topojson', { locals: { 
         user: req.params.user, 
@@ -181,7 +184,7 @@ var Controller = function( Github ){
       });
   };
   
-  this.tiles = function( req, res ){
+  controller.tiles = function( req, res ){
       var callback = req.query.callback;
       delete req.query.callback;
       
@@ -275,7 +278,7 @@ var Controller = function( Github ){
       }
   };
 
-  return this;
+  return controller;
 };
 
 module.exports = Controller;
