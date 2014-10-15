@@ -98,7 +98,7 @@ var Controller = function( Github ){
               });
             });
           } else if ( req.params.format ) {
-            if ( !koop.files.localDir ){
+            if ( !Github.files.localDir ){
               res.send('No file system configured for exporting data', 501);
               return;
             }
