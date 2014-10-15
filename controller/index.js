@@ -99,7 +99,8 @@ var Controller = function( Github ){
             });
           } else if ( req.params.format ) {
             if ( req.params.format == 'png'){
-              res.redirect(req.url.replace('.png', '')+'/thumbnail');
+              //res.redirect(req.url.replace('.png', '')+'/thumbnail');
+              controller.thumbnail(req, res);
             } else {
               // change geojson to json
               req.params.format = req.params.format.replace('geojson', 'json'); 
@@ -109,19 +110,21 @@ var Controller = function( Github ){
               var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
               var key = crypto.createHash('md5').update( toHash ).digest('hex');
   
-              var fileName = [Github.cacheDir() + 'files', dir, key + '.' + req.params.format].join('/');
-  
-              if (fs.existsSync( fileName )){
-                res.sendfile( fileName );
-              } else {
-                Github.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
-                  if (err){
-                    res.send(err, 500);
-                  } else {
-                    res.sendfile( file );
-                  }
-                });
-              }
+              var fileName = [Github.files.localDir, 'files', dir, key + '.' + req.params.format].join('/');
+ 
+              fs.exists(fileName, function( exists ){
+                if ( exists ){
+                  res.sendfile( fileName );
+                } else {
+                  Github.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
+                    if (err){
+                      res.send(err, 500);
+                    } else {
+                      res.sendfile( file );
+                    }
+                  });
+                }
+              });
             }
           } else {
             res.json( data );
@@ -185,6 +188,11 @@ var Controller = function( Github ){
   };
   
   controller.tiles = function( req, res ){
+      if ( !Github.files.localDir ){
+        res.send('Local Filesystem not configured. Please add a "data_dir" to the server config to support tiles', 501);
+        return;
+      }
+
       var callback = req.query.callback;
       delete req.query.callback;
       
@@ -196,7 +204,7 @@ var Controller = function( Github ){
           if (req.query.style){
             req.params.style = req.query.style;
           }
-          Github.tilesGet(req.params, data[ layer ], function(err, tile){
+          Github.tileGet(req.params, data[ layer ], function(err, tile){
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
               res.sendfile( tile );
             } else {
@@ -228,25 +236,26 @@ var Controller = function( Github ){
         if ( req.params.format == 'png' || req.params.format == 'pbf'){
           res.sendfile( file );
         } else {
-          fs.readFile(file, function(err, data){
+          fs.readFile( file, function(err, data){
+            var json = JSON.parse(data);
             if ( callback ){
-              res.send( callback + '(' + JSON.parse(data) + ')' );
+              res.send( callback + '(' + JSON.stringify( json ) + ')' );
             } else {
-              res.json( JSON.parse(data) );
+              res.json( json );
             }
-          })
+          });
         }
       };
   
       if ( req.params.user && req.params.repo && req.params.file ){
         req.params.file = req.params.file.replace('.geojson', '');
         key = ['github', req.params.user, req.params.repo, req.params.file].join(':');
-        var file = Github.cacheDir() + 'tiles/';
+        var file = Github.files.localDir + '/tiles/';
           file += key + ':' + layer + '/' + req.params.format;
           file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
   
         var jsonFile = file.replace(/png|pbf|utf/g, 'json');
-  
+ 
         // if the json file alreadty exists, dont hit the db, just send the data
         if (fs.existsSync(jsonFile) && !fs.existsSync( file ) ){
           _send( null, fs.readFileSync( jsonFile ) );
@@ -258,17 +267,17 @@ var Controller = function( Github ){
   
       } else if ( req.params.user && req.params.repo ) {
         key = ['github', req.params.user, req.params.repo].join(':');
-        var file = Github.cacheDir() + 'tiles/';
+        var file = Github.files.localDir + '/tiles/';
           file += key + ':' + layer + '/' + req.params.format;
           file += '/' + req.params.z + '/' + req.params.x + '/' + req.params.y + '.' + req.params.format;
   
         var jsonFile = file.replace(/png|pbf|utf/g, 'json');
-  
+
         // if the json file alreadty exists, dont hit the db, just send the data
         if (fs.existsSync(jsonFile) && !fs.existsSync( file ) ){
-          _send( null, [jsonFile] );
+          _send( null, fs.readFileSync( jsonFile ) );
         } else if ( !fs.existsSync( file ) ) {
-          Github.find(req.params.user, req.params.repo, null, req.query, _send );
+          Github.find(req.params.user, req.params.repo, req.params.file, req.query, _send );
         } else {
           _sendImmediate(file);
         }
