@@ -110,11 +110,16 @@ var Controller = function( Github ){
               var toHash = JSON.stringify( req.params ) + JSON.stringify( req.query );
               var key = crypto.createHash('md5').update( toHash ).digest('hex');
   
-              var fileName = [Github.files.localDir, 'files', dir, key + '.' + req.params.format].join('/');
- 
-              fs.exists(fileName, function( exists ){
+              var path = ['files', dir].join('/');
+              var fileName = key + '.' + req.params.format;
+
+              Github.files.exists(path, fileName, function( exists, path ){
                 if ( exists ){
-                  res.sendfile( fileName );
+                  if (path.substr(0, 4) == 'http'){
+                    res.redirect( path );
+                  } else {
+                    res.sendfile( path );
+                  }
                 } else {
                   Github.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
                     if (err){
