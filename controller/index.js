@@ -50,7 +50,7 @@ var Controller = function( Github ){
           });
           //res.json( data );
        } else {
-         this.Error(req, res);
+         controller.Error(req, res);
        }
     };
   
@@ -66,7 +66,7 @@ var Controller = function( Github ){
       } else if ( req.params.user && req.params.repo, req.query ) {
         Github.find(req.params.user, req.params.repo, null, req.query, _reply );
       } else {
-        this.notFound(req, res);
+        controller.notFound(req, res);
       }
     }
   };
@@ -140,7 +140,7 @@ var Controller = function( Github ){
             res.json( data );
           }
         } else {
-          this.Error(req, res);
+          controller.Error(req, res);
         }
       }
       if ( req.params.user && req.params.repo && req.params.file ){
@@ -149,12 +149,12 @@ var Controller = function( Github ){
       //} else if ( req.params.user && req.params.repo, req.query ) {
       //  Github.find(req.params.user, req.params.repo, null, req.query, _send );
       } else {
-        this.notFound(req, res);
+        controller.notFound(req, res);
       }
   };
   
   controller.featureservice = function(req, res){
-      var callback = req.query.callback, self = this;
+      var callback = req.query.callback;
       delete req.query.callback;
   
       if ( req.params.user && req.params.repo && req.params.file ){
@@ -169,7 +169,7 @@ var Controller = function( Github ){
           controller.processFeatureServer( req, res, err, data, callback);
         });
       } else {
-        this.notFound(req, res);
+        controller.notFound(req, res);
       }
   
   };
