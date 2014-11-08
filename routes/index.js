@@ -8,6 +8,7 @@ module.exports = {
   'get /github/:user/:repo/arcgis/rest/services/FeatureServer': 'featureservice',
   'get /github/:user/:repo/arcgis/rest/services/FeatureServer/:layer': 'featureservice',
   'get /github/:user/:repo/arcgis/rest/services/FeatureServer/:layer/:method': 'featureservice',
+  'post /github/:user/:repo/arcgis/rest/services/FeatureServer/:layer/:method': 'featureservice',
   'get /github/:user/:repo/:file.:format': 'getRepo',
   'get /github/:user/:repo/:file': 'getRepo',
   'get /github/:user/:repo/:file/preview': 'preview',
@@ -16,6 +17,7 @@ module.exports = {
   'get /github/:user/:repo/:file/arcgis/rest/services/FeatureServer': 'featureservice',
   'get /github/:user/:repo/:file/arcgis/rest/services/FeatureServer/:layer': 'featureservice',
   'get /github/:user/:repo/:file/arcgis/rest/services/FeatureServer/:layer/:method': 'featureservice',
+  'post /github/:user/:repo/:file/arcgis/rest/services/FeatureServer/:layer/:method': 'featureservice',
   'get /github/:user/:repo/:file/thumbnail' : 'thumbnail',
   'get /github/:user/:repo/:file/tiles/:z/:x/:y.:format': 'tiles',
   'get /github/:user/:repo/:file/:layer/tiles/:z/:x/:y.:format': 'tiles'
