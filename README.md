@@ -10,18 +10,23 @@ Source providers such as `koop-github` require that you first install koop:
 ```bash
 git clone git@github.com:Esri/koop.git
 cd koop
-npm install 
-# copy and edit the config file
-cp config/default.yml.example config/default.yml
+npm install
 ```
 
-you can then install `koop-github`. 
+you can then install `koop-github`.
 
 ```bash
 npm install https://github.com/chelm/koop-github/tarball/master
 
 # start the koop server
-node server.js 
+node server.js
+```
+
+in order to avoid hitting cap on amount of anonymous requests that can be made to Github, create a [token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) and supply it as an environment variable when launching koop
+
+```bash
+# start the koop server
+KOOP_GITHUB_TOKEN=xxx node server.js
 ```
 
 ## Usage
