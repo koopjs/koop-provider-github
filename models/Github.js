@@ -1,4 +1,4 @@
-var Geohub = require('geohub'),
+var Geohub = require('geohub');
 
 var Github = function( koop ){
 
