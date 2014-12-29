@@ -1,11 +1,10 @@
 var sm = require('sphericalmercator'),
   merc = new sm({size:256}),
   crypto = require('crypto'),
-  BaseController = require('koop-server/lib/BaseController.js'),
   fs = require('fs');
 
 // inherit from base controller
-var Controller = function( Github ){
+var Controller = function( Github, BaseController ){
 
   var controller = {};
   controller.__proto__ = BaseController( );
