@@ -1,6 +1,4 @@
 var Geohub = require('geohub'),
-  BaseModel = require('koop-server/lib/BaseModel.js');
-
 
 var Github = function( koop ){
 
@@ -9,7 +7,7 @@ var Github = function( koop ){
   }
 
   var github = {};
-  github.__proto__ = BaseModel( koop );
+  github.__proto__ = koop.BaseModel( koop );
   
   github.find = function( user, repo, file, options, callback ){
     file = ( file ) ? file.replace(/::/g, '/') : null;
