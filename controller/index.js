@@ -7,7 +7,9 @@ var sm = require('sphericalmercator'),
 var Controller = function( Github, BaseController ){
 
   var controller = {};
-  controller.__proto__ = BaseController( );
+  if ( BaseController ){
+    controller.__proto__ = BaseController( );
+  };
 
   // general helper for not found repos
   controller.notFound = function(req, res){
