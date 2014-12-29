@@ -19,7 +19,7 @@ var Github = function( koop ){
     
     koop.Cache.get( type, key, options, function(err, entry ){
       if ( err){
-        Geohub.repo( user, repo, file, config.token, function( err, geojson ){
+        Geohub.repo( user, repo, file, koop.config.ghtoken, function( err, geojson ){
           if ( !geojson || err ){
             callback( 'No geojson found', null );
           } else {
@@ -65,12 +65,12 @@ var Github = function( koop ){
     var repo = key.shift();
     var path = key.join('/') + '.geojson';
   
-    Geohub.repoSha(user, repo, path, config.token, function(err, sha){
+    Geohub.repoSha(user, repo, path, koop.config.ghtoken, function(err, sha){
       
       if ( sha == json[0].sha ){
         callback(null, false);
       } else {
-        Geohub.repo( user, repo, path, config.token, function( err, geojson ){
+        Geohub.repo( user, repo, path, koop.config.ghtoken, function( err, geojson ){
           callback(null, geojson );
         });
       }
