@@ -1,15 +1,12 @@
 var Geohub = require('geohub'),
   BaseModel = require('koop-server/lib/BaseModel.js');
 
-var config = {};
-try {
-  config = require('./config');
-} catch(e){
-  console.warn('No config file found for koop-github. Please copy the models/config.js.example to models/config.js.');
-}
-
 
 var Github = function( koop ){
+
+  if ( !koop.config.ghtoken ){
+    console.warn('No Github Token in config. This may cause problems accessing data.');
+  }
 
   var github = {};
   github.__proto__ = BaseModel( koop );
