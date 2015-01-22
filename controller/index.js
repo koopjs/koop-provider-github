@@ -162,11 +162,13 @@ var Controller = function( Github, BaseController ){
         req.params.file = req.params.file.replace('.geojson', '');
         Github.find( req.params.user, req.params.repo, req.params.file, req.query, function( err, data){
           delete req.query.geometry;
+          delete req.query.where;
           controller.processFeatureServer( req, res, err, data, callback);
         });
       } else if ( req.params.user && req.params.repo && !req.params.file ) {
         Github.find( req.params.user, req.params.repo, null, req.query, function( err, data){
           delete req.query.geometry;
+          delete req.query.where;
           controller.processFeatureServer( req, res, err, data, callback);
         });
       } else {
@@ -215,7 +217,8 @@ var Controller = function( Github, BaseController ){
           if (req.query.style){
             req.params.style = req.query.style;
           }
-          Github.tileGet(req.params, data[ layer ], function(err, tile){
+          req.params.name = req.params.file;
+          Github.tileGet(req.params, data[layer], function(err, tile){
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
               res.sendfile( tile );
             } else {
