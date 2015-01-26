@@ -224,7 +224,11 @@ var Controller = function( Github, BaseController ){
           }
           req.params.name = req.params.file;
           Github.tileGet(req.params, data[layer], function(err, tile){
+            if (req.params.format == 'pbf') {
+              res.setHeader('content-encoding', 'deflate');
+            }
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
+              res.setHeader('content-encoding', 'deflate');
               res.sendFile( tile );
             } else {
               if ( callback ){
@@ -252,6 +256,9 @@ var Controller = function( Github, BaseController ){
       };
   
       var _sendImmediate = function( file ){
+        if (req.params.format == 'pbf') {
+          res.setHeader('content-encoding', 'deflate');
+        }
         if ( req.params.format == 'png' || req.params.format == 'pbf'){
           res.sendFile( file );
         } else {
