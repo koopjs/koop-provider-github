@@ -46,7 +46,7 @@ var Controller = function( Github, BaseController ){
               res.send(err, 500);
             } else {
               // send back image
-              res.sendfile( file );
+              res.sendFile( file );
             }
           });
           //res.json( data );
@@ -58,7 +58,7 @@ var Controller = function( Github, BaseController ){
   
     var fileName = Github.thumbnailExists(key, req.query);
     if ( fileName ){
-      res.sendfile( fileName );
+      res.sendFile( fileName );
     } else {
   
      if ( req.params.user && req.params.repo && req.params.file ){
@@ -124,14 +124,14 @@ var Controller = function( Github, BaseController ){
                   if (path.substr(0, 4) == 'http'){
                     res.redirect( path );
                   } else {
-                    res.sendfile( path );
+                    res.sendFile( path );
                   }
                 } else {
                   Github.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
                     if (err){
                       res.send(err, 500);
                     } else {
-                      res.sendfile( file );
+                      res.sendFile( file );
                     }
                   });
                 }
@@ -213,6 +213,11 @@ var Controller = function( Github, BaseController ){
         layer = req.params.layer || 0;
   
       var _send = function( err, data ){
+          if (err){
+            res.status(400).send(err);
+            return;
+          }
+
           req.params.key = key + ':' + layer;
           if (req.query.style){
             req.params.style = req.query.style;
@@ -220,13 +225,13 @@ var Controller = function( Github, BaseController ){
           req.params.name = req.params.file;
           Github.tileGet(req.params, data[layer], function(err, tile){
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
-              res.sendfile( tile );
+              res.sendFile( tile );
             } else {
               if ( callback ){
                 res.send( callback + '(' + JSON.stringify( tile ) + ')' );
               } else {
                 if (typeof tile == 'string'){
-                  res.sendfile( tile );
+                  res.sendFile( tile );
                 } else {              
                   res.json( tile );
                 }
@@ -248,7 +253,7 @@ var Controller = function( Github, BaseController ){
   
       var _sendImmediate = function( file ){
         if ( req.params.format == 'png' || req.params.format == 'pbf'){
-          res.sendfile( file );
+          res.sendFile( file );
         } else {
           fs.readFile( file, function(err, data){
             var json = JSON.parse(data);
