@@ -228,7 +228,6 @@ var Controller = function( Github, BaseController ){
               res.setHeader('content-encoding', 'deflate');
             }
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
-              res.setHeader('content-encoding', 'deflate');
               res.sendFile( tile );
             } else {
               if ( callback ){
