@@ -14,5 +14,6 @@ module.exports = {
   'get /github/:user/:repo/:file/FeatureServer/:layer/:method': 'featureservice',
   'get /github/:user/:repo/:file/thumbnail' : 'thumbnail',
   'get /github/:user/:repo/:file/tiles/:z/:x/:y.:format': 'tiles',
-  'get /github/:user/:repo/:file/:layer/tiles/:z/:x/:y.:format': 'tiles'
+  'get /github/:user/:repo/:file/:layer/tiles/:z/:x/:y.:format': 'tiles',
+  'get /github/:user/:repo/:file/drop': 'drop'
 }

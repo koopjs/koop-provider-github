@@ -27,6 +27,17 @@ var Controller = function( Github, BaseController ){
   controller.index = function(req, res){
     res.render(__dirname + '/../views/index');
   };
+
+  // drops the cache for an item
+  controller.drop = function(req, res){
+    Github.drop(req.params.user, req.params.repo, req.params.file, req.query, function(error, itemJson){ 
+      if (error) {
+        res.status(400).send( error );
+      } else {
+        res.json( itemJson );
+      }
+    });
+  };
   
   controller.thumbnail = function(req, res){
     // check the image first and return if exists

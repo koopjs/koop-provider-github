@@ -75,6 +75,23 @@ var Github = function( koop ){
     });
   };*/
 
+
+   // drops the item from the cache
+  github.drop = function( user, repo, file, options, callback ){
+    var key = [user, repo, file].join('/');
+    var type = 'Github';
+    var dir = [ type.toLowerCase(), user, repo, file].join(':');
+    koop.Cache.remove(type, key, options, function(err, res){
+      koop.files.removeDir( 'files/' + dir, function(err, res){
+        koop.files.removeDir( 'tiles/'+ dir, function(err, res){
+          koop.files.removeDir( 'thumbs/'+ dir, function(err, res){
+            callback(err, true);
+          });
+        });
+      });
+    });
+  };
+
   return github;
 
 };
