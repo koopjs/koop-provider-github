@@ -223,7 +223,7 @@ var Controller = function( Github, BaseController ){
             req.params.style = req.query.style;
           }
           req.params.name = req.params.file;
-          Github.tileGet(req.params, data[layer], function(err, tile){
+          Github.tileGet( req.params, data[layer], function( err, tile ){
             if (req.params.format == 'pbf') {
               res.setHeader('content-encoding', 'deflate');
             }
@@ -285,6 +285,8 @@ var Controller = function( Github, BaseController ){
         if (fs.existsSync(jsonFile) && !fs.existsSync( file ) ){
           _send( null, fs.readFileSync( jsonFile ) );
         } else if ( !fs.existsSync( file ) ) {
+          var factor = .35;
+          req.query.simplify = ( ( Math.abs( req.query.geometry.xmin - req.query.geometry.xmax ) ) / 256) * factor;
           Github.find(req.params.user, req.params.repo, req.params.file, req.query, _send );
         } else {
           _sendImmediate(file);

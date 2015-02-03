@@ -1,6 +1,6 @@
 {
   "name": "koop-github",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "A github wrapper for koop ",
   "main": "index.js",
   "directories": {
