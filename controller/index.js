@@ -235,18 +235,25 @@ var Controller = function( Github, BaseController ){
           }
           req.params.name = req.params.file;
           Github.tileGet( req.params, data[layer], function( err, tile ){
+            if ( err ){
+              return res.status(err.code || 500).send( err.message || 'Unknown error while creating the tile' );
+            }
+
             if (req.params.format == 'pbf') {
               res.setHeader('content-encoding', 'deflate');
             }
             if ( req.params.format == 'png' || req.params.format == 'pbf'){
               res.sendFile( tile );
-            } else {
+            } 
+            else {
               if ( callback ){
                 res.send( callback + '(' + JSON.stringify( tile ) + ')' );
-              } else {
+              } 
+              else {
                 if (typeof tile == 'string'){
                   res.sendFile( tile );
-                } else {              
+                } 
+                else {              
                   res.json( tile );
                 }
               }

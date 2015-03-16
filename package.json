@@ -1,13 +1,13 @@
 {
   "name": "koop-github",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "A github wrapper for koop ",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha test/"
+    "test": "mocha test/ -t 20000"
   },
   "dependencies": {
     "geohub": "0.3.2",

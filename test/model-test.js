@@ -1,6 +1,6 @@
 var should = require('should'),
   config = require('config'),
-  koop = require('koop-server/lib');
+  koop = require('koop/lib');
 
 var repo = 'geodata',
   user = 'chelm',
@@ -9,7 +9,7 @@ var repo = 'geodata',
 
 before(function(done){
   // setup koop 
-  koop.Cache.db = koop.PostGIS.connect( config.db.postgis.conn );
+  koop.Cache.db = koop.LocalDB;
   var data_dir = __dirname + '/output/';
   koop.Cache.data_dir = data_dir;
   Github = new require('../models/Github.js')( koop );
