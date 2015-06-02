@@ -54,6 +54,10 @@ so for example:
 
 `/github/CityOfPhiladelphia/phl-open-geodata/school_facilities::philadelphiaschool_facilities201302/preview`
 
+## Testing
+
+`koop-github` uses [mocha](http://mochajs.org/) to run tests. Running `npm install` and `npm test` locally should allow you to get the test suite running without any further configuration.
+
 ## License
 
 Copyright 2015 Esri
