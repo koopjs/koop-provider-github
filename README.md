@@ -1,5 +1,7 @@
 # koop-github
 
+> Github provider for [Koop](https://github.com/esri/koop).
+
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
 
@@ -8,11 +10,9 @@
 [travis-image]: https://img.shields.io/travis/koopjs/koop-github.svg?style=flat-square
 [travis-url]: https://travis-ci.org/koopjs/koop-github
 
-Github provider for [Koop](https://github.com/esri/koop).
-
 Take GeoJSON from a Github repository and serve it as an ArcGIS Feature Service, CSV, KML, or Shapefile.
 
-# Install
+## Install
 
 Koop providers require that you first install Koop. For information on using Koop, see https://github.com/esri/koop.
 
@@ -57,6 +57,10 @@ so for example:
 ## Testing
 
 `koop-github` uses [mocha](http://mochajs.org/) to run tests. Running `npm install` and `npm test` locally should allow you to get the test suite running without any further configuration.
+
+## Contributing
+
+Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/Esri/contributing).
 
 ## License
 
