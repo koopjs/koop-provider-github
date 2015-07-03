@@ -13,13 +13,13 @@ var Controller = function( Github, BaseController ){
 
   // general helper for not found repos
   controller.notFound = function(req, res){
-    res.send('Must specify a user, repo, and file', 404);
+    res.status(404).send('Must specify a user, repo, and file');
   };
   
   
   // general helper for error'd requests
   controller.Error = function(req, res){
-    res.send('There was a problem accessing this repo', 500);
+    res.status(500).send('There was a problem accessing this repo');
   };
   
   
@@ -54,7 +54,7 @@ var Controller = function( Github, BaseController ){
           // generate a thumbnail
           Github.generateThumbnail( data[0], key, req.query, function(err, file){
             if (err){
-              res.send(err, 500);
+              res.status(500).send(err);
             } else {
               // send back image
               res.sendFile( file );
@@ -111,7 +111,7 @@ var Controller = function( Github, BaseController ){
             });
           } else if ( req.params.format ) {
             if ( !Github.files.localDir ){
-              res.send('No file system configured for exporting data', 501);
+              res.status(501).send('No file system configured for exporting data');
               return;
             }
 
@@ -140,7 +140,7 @@ var Controller = function( Github, BaseController ){
                 } else {
                   Github.exportToFormat( req.params.format, dir, key, data[0], {}, function(err, file){
                     if (err){
-                      res.send(err, 500);
+                      res.status(500).send(err);
                     } else {
                       res.sendFile( file );
                     }
@@ -213,7 +213,7 @@ var Controller = function( Github, BaseController ){
   
   controller.tiles = function( req, res ){
       if ( !Github.files.localDir ){
-        res.send('Local Filesystem not configured. Please add a "data_dir" to the server config to support tiles', 501);
+        res.status(501).send('Local Filesystem not configured. Please add a "data_dir" to the server config to support tiles');
         return;
       }
 
