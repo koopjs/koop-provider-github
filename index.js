@@ -1,4 +1,8 @@
-exports.name = 'Github';
-exports.controller = require('./controller');
-exports.routes = require('./routes');
-exports.model = require('./models/Github.js');  
+var provider = {
+  name: 'Github',
+  model: require('./models/Github'),
+  controller: require('./controller'),
+  routes: require('./routes')
+}
+
+module.exports = provider
