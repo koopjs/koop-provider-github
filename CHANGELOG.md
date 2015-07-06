@@ -13,4 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 * Deleted unused fixtures and configuration files
 
+### Fixed
+* Reverted to leaflet CDN to fix broken `leaflet.css` link
+
 ## v0.1.12 - 2015-03-16
