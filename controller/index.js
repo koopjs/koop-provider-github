@@ -38,9 +38,9 @@ var Controller = function (Github, BaseController) {
     req.query.height = parseInt(req.query.height, 10) || 150
     req.query.f_base = dir + key + '/' + req.query.width + '::' + req.query.height
 
-    var _reply = function (err, data) {
-      if (err) return res.json(err, 500)
-      if (!data) controller.Error(req, res)
+    function _reply (err, data) {
+      if (err) return res.status(500).json(err)
+      if (!data) return controller.Error(req, res)
 
       // generate a thumbnail
       Github.generateThumbnail(data[0], key, req.query, function (err, file) {
@@ -70,35 +70,16 @@ var Controller = function (Github, BaseController) {
 
   controller.getRepo = function (req, res) {
     // method to respond to model finds
-    var _send = function (err, data) {
+    function _send (err, data) {
       if (err) return res.json(err, 500)
       if (!data) return controller.Error(req, res)
 
-      var len = data.length
-      var allTopojson = []
-
-      var processTopojson = function (topology) {
-        allTopojson.push(topology)
-        if (allTopojson.length === len) {
-          res.json(allTopojson[0])
-        }
-      }
-
-      if (req.query.topojson) {
-        data.forEach(function (d) {
-          Topojson.convert(d, function (err, topology) {
-            if (err) return res.json(err, 500)
-            processTopojson(topology)
-          })
-        })
-      } else if (req.params.format) {
+      if (req.params.format) {
         if (!Github.files.localDir) {
-          res.status(501).send('No file system configured for exporting data')
-          return
+          return res.status(501).send('No file system configured for exporting data')
         }
 
         if (req.params.format === 'png') {
-          // res.redirect(req.url.replace('.png', '')+'/thumbnail')
           controller.thumbnail(req, res)
         } else {
           // change geojson to json
@@ -197,7 +178,7 @@ var Controller = function (Github, BaseController) {
     var layer = req.params.layer || 0
     var file, jsonFile, key
 
-    var _send = function (err, data) {
+    function _send (err, data) {
       if (err) return res.status(400).send(err)
 
       req.params.key = key + ':' + layer
@@ -244,7 +225,7 @@ var Controller = function (Github, BaseController) {
       spatialReference: { wkid: 4326 }
     }
 
-    var _sendImmediate = function (file) {
+    function _sendImmediate (file) {
       if (req.params.format === 'pbf') {
         res.setHeader('content-encoding', 'deflate')
       }
