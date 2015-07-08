@@ -6,8 +6,10 @@ var Github = function( koop ){
     console.warn('No Github Token in config. This may cause problems accessing data.');
   }
 
-  var github = {};
-  github.__proto__ = koop.BaseModel( koop );
+  github = new koop.BaseModel( koop );
+
+  // we can easily test calls to the geohub this way
+  github.geohub = Geohub;
   
   github.find = function( user, repo, file, options, callback ){
     file = ( file ) ? file.replace(/::/g, '/') : null;
@@ -15,9 +17,9 @@ var Github = function( koop ){
     var key = [ user, repo, file].join('/'),
       type = 'Github';
     
-    koop.Cache.get( type, key, options, function(err, entry ){
-      if ( err){
-        Geohub.repo( user, repo, file, koop.config.ghtoken, function( err, geojson ){
+    koop.Cache.get( type, key, options, function(err, entry) {
+      if (err){
+        github.geohub.repo( user, repo, file, koop.config.ghtoken, function( err, geojson ){
           if ( !geojson || err ){
             callback( 'No geojson found', null );
           } else {

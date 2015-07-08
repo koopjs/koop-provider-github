@@ -1,6 +1,6 @@
 {
   "name": "koop-github",
-  "description": "A Github provider for Koop.",
+  "description": "A Github provider for Koop",
   "version": "0.1.12",
   "author": "Chris Helm",
   "bugs": {
@@ -16,10 +16,8 @@
     "koop": "2.x",
     "mocha": "^2.2.5",
     "should": "~3.3.1",
+    "sinon": "^1.15.4",
     "supertest": "~0.11.0"
-  },
-  "directories": {
-    "test": "test"
   },
   "homepage": "https://github.com/koopjs/koop-github",
   "keywords": [

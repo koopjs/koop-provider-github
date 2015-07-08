@@ -1,4 +1,5 @@
 var should = require('should'),
+  sinon = require('sinon'),
   config = require('config'),
   koop = require('koop/lib');
 
@@ -8,33 +9,55 @@ var repo = 'geodata',
   key = [repo, user, file].join('/');
 
 before(function(done){
-  // setup koop 
+  // setup koo 
+  var config = {};
+  config.data_dir = __dirname + '/output/';
+  koop.config = config;
+  koop.log = new koop.Logger({logfile:'./test.log'});
+
+  koop.Cache = new koop.DataCache( koop );
   koop.Cache.db = koop.LocalDB;
-  var data_dir = __dirname + '/output/';
-  koop.Cache.data_dir = data_dir;
-  Github = new require('../models/Github.js')( koop );
+  koop.Cache.db.log = koop.log;
+
+  github = new require('../models/Github.js')( koop );
   done();
 });
 
-describe('Github Model', function(){
+describe('Github Model', function () {
+    describe('when caching a github file', function () {
+      before(function (done){
+        sinon.stub(github.geohub, 'repo', function (user, repo, file, token, callback) {
+          callback(null, {});
+        });
+      
+        sinon.stub(koop.Cache, 'get', function (type, id, options, callback) {
+          callback(true);
+        });
 
+        sinon.stub(koop.Cache, 'insert', function (type, id, geojson, layer, callback) {
+          callback(null, true);
+        });
 
-    describe('when caching a github file', function(){
-
-      afterEach(function(done){
         done();
       });
-    
-      it('should find the repo and return the data', function(done){
-        Github.find(user, repo, file, {}, function(err, data){
+
+      after(function(done){
+        koop.Cache.get.restore();
+        koop.Cache.insert.restore();
+        github.geohub.repo.restore()
+        done();
+      });
+
+      it('should call get, insert and Geohubs repo', function(done){
+        github.find(user, repo, file, {}, function(err, data){
           should.not.exist(err);
-          should.exist(data);
-          data.length.should.equal(1);
+          github.geohub.repo.called.should.equal(true);
+          koop.Cache.get.called.should.equal(true);
+          koop.Cache.insert.called.should.equal(true);
           done();
         });
       });
 
     });
-
 });
 

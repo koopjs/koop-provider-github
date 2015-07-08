@@ -1,6 +1,6 @@
 # koop-github
 
-> Github provider for [Koop](https://github.com/esri/koop).
+> Github provider for [Koop](https://github.com/esri/koop)
 
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
