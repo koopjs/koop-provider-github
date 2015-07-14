@@ -17,6 +17,7 @@
     "mocha": "^2.2.5",
     "should": "~3.3.1",
     "sinon": "^1.15.4",
+    "standard": "*",
     "supertest": "~0.11.0"
   },
   "homepage": "https://github.com/koopjs/koop-github",
@@ -37,6 +38,6 @@
     "url": "git@github.com:koopjs/koop-github.git"
   },
   "scripts": {
-    "test": "mocha test/ -t 20000"
+    "test": "standard && mocha test/ -t 20000"
   }
 }
