@@ -6,12 +6,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 * Now checking build status with Travis-CI
+* Using [JavaScript Standard Style](https://github.com/feross/standard)
 
 ### Changed
 * Improved documentation
 
 ### Removed
 * Deleted unused fixtures and configuration files
+* Removed broken TopoJSON support
 
 ### Fixed
 * Reverted to leaflet CDN to fix broken `leaflet.css` link
