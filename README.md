@@ -1,6 +1,6 @@
 # koop-github
 
-> Github provider for [Koop](https://github.com/esri/koop)
+> Github provider for [Koop](https://github.com/koopjs/koop)
 
 [![npm][npm-image]][npm-url]
 [![travis][travis-image]][travis-url]
@@ -14,7 +14,7 @@ Take GeoJSON from a Github repository and serve it as an ArcGIS Feature Service,
 
 ## Install
 
-Koop providers require that you first install Koop. For information on using Koop, see https://github.com/esri/koop.
+Koop providers require that you first install Koop. For information on using Koop, see https://github.com/koopjs/koop.
 
 You can add `koop-github` to your Koop server's dependencies by installing it with npm and adding it to your package.json like so:
 
