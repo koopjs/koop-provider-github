@@ -71,7 +71,7 @@ var Controller = function (Github, BaseController) {
   controller.getRepo = function (req, res) {
     // method to respond to model finds
     function _send (err, data) {
-      if (err) return res.json(err, 500)
+      if (err) return res.status(500).json(err)
       if (!data) return controller.Error(req, res)
 
       if (req.params.format) {
@@ -147,7 +147,6 @@ var Controller = function (Github, BaseController) {
   // renders views/demo/github
   controller.preview = function (req, res) {
     req.params.file = req.params.file.replace('.geojson', '')
-    console.log(req.params)
     res.render(__dirname + '/../views/demo', {
       user: req.params.user,
       repo: req.params.repo,
