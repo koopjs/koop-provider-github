@@ -7,6 +7,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * Bump Esri Leaflet version used by preview to 1.0.0
 
+### Added
+* Added `status.version` to provider exports
+
 ## [1.0.0] - 2015-07-28
 
 ### Added
