@@ -147,22 +147,30 @@ var Controller = function (Github, BaseController) {
   // renders views/demo/github
   controller.preview = function (req, res) {
     req.params.file = req.params.file.replace('.geojson', '')
-    res.render(__dirname + '/../views/demo', { locals: { user: req.params.user, repo: req.params.repo, file: req.params.file } })
+    console.log(req.params)
+    res.render(__dirname + '/../views/demo', {
+      user: req.params.user,
+      repo: req.params.repo,
+      file: req.params.file
+    })
   }
 
   // Handle the tile preview route
   controller.tile_preview = function (req, res) {
     req.params.file = req.params.file.replace('.geojson', '')
-    res.render('demo/github_tiles', { locals: { user: req.params.user, repo: req.params.repo, file: req.params.file } })
+    res.render('demo/github_tiles', {
+      user: req.params.user,
+      repo: req.params.repo,
+      file: req.params.file
+    })
   }
 
   controller.topojson_preview = function (req, res) {
     req.params.file = req.params.file.replace('.geojson', '')
-    res.render('demo/github_topojson', { locals: {
-        user: req.params.user,
-        repo: req.params.repo,
-        file: req.params.file
-      }
+    res.render('demo/github_topojson', {
+      user: req.params.user,
+      repo: req.params.repo,
+      file: req.params.file
     })
   }
 
