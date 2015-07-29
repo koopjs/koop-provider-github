@@ -13,7 +13,7 @@ before(function (done) {
   var config = {}
   config.data_dir = __dirname + '/output/'
   koop.config = config
-  koop.log = new koop.Logger({logfile: './test.log'})
+  koop.log = new koop.Logger({ logfile: './' })
 
   koop.Cache = new koop.DataCache(koop)
   koop.Cache.db = koop.LocalDB
