@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 * Bump Esri Leaflet version used by preview to 1.0.0
+* Switch from `mocha` to `tape` for tests
 
 ### Added
 * Added `status.version` to provider exports

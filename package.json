@@ -14,11 +14,11 @@
   },
   "devDependencies": {
     "koop": "2.x",
-    "mocha": "^2.2.5",
-    "should": "~3.3.1",
     "sinon": "^1.15.4",
     "standard": "*",
-    "supertest": "~0.11.0"
+    "supertest": "~0.11.0",
+    "tap-spec": "^4.0.2",
+    "tape": "^4.0.1"
   },
   "homepage": "https://github.com/koopjs/koop-github",
   "keywords": [
@@ -38,6 +38,6 @@
     "url": "git@github.com:koopjs/koop-github.git"
   },
   "scripts": {
-    "test": "standard && mocha test/ -t 20000"
+    "test": "standard && tape test/*.js | tap-spec"
   }
 }
