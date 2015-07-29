@@ -10,6 +10,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 * Added `status.version` to provider exports
 
+### Fixed
+* Corrected test log location
+
 ## [1.0.0] - 2015-07-28
 
 ### Added
