@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [1.0.1] - 2015-08-13
 
 ### Changed
 * Bump Esri Leaflet version used by preview to 1.0.0
@@ -30,4 +30,5 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## v0.1.12 - 2015-03-16
 
+[1.0.1]: https://github.com/koopjs/koop-github/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/koopjs/koop-github/compare/v0.1.12...v1.0.0
