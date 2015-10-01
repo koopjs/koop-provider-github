@@ -4,9 +4,9 @@ var koop = require('koop')({
   data_dir: __dirname + '/output/'
 })
 var kooplib = require('koop/lib')
-var provider = require('../index.js')
-var model = new provider.model(kooplib) // eslint-disable-line
-var controller = new provider.controller(model, kooplib.BaseController) // eslint-disable-line
+var provider = require('../')
+var model = provider.model(kooplib)
+var controller = provider.controller(model, kooplib.BaseController)
 koop._bindRoutes(provider.routes, controller)
 
 test('routes: invalid URL', function (t) {

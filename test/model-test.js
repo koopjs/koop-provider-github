@@ -1,7 +1,7 @@
 var test = require('tape')
 var sinon = require('sinon')
 var koop = require('koop/lib')
-var Model = require('../models/Github.js')
+var createGithubModel = require('../model')
 var repo = 'geodata'
 var user = 'chelm'
 var file = 'co-river-basin'
@@ -10,15 +10,15 @@ koop.config = {
   data_dir: __dirname + '/output/'
 }
 
-koop.log = new koop.Logger({logfile: './test.log'})
+koop.log = new koop.Logger({})
 koop.Cache = new koop.DataCache(koop)
 koop.Cache.db = koop.LocalDB
 koop.Cache.db.log = koop.log
 
-var github = new Model(koop)
+var github = createGithubModel(koop)
 
 test('model: setup', function (t) {
-  sinon.stub(github.geohub, 'repo', function (user, repo, file, token, callback) {
+  sinon.stub(github.geohub, 'repo', function (options, callback) {
     callback(null, {})
   })
 

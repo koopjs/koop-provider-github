@@ -1,6 +1,6 @@
 module.exports = {
-  'get /github/': 'index',
   'get /github': 'index',
+  'get /github/rate_limit': 'rate_limit',
   'get /github/:user': 'notFound',
   'get /github/:user/:repo': 'getRepo',
   'get /github/:user/:repo/FeatureServer': 'featureservice',

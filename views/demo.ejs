@@ -52,15 +52,14 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
-    <script type="text/javascript" src="/js/map.js"></script>
+    <script type="text/javascript" src="<%= baseUrl %>/js/map.js"></script>
 
     <div id="map"></div>
     <script>
-      $(function(){
-        var mapDom = 'map';
-        $('#'+mapDom).css({ width:document.width, height: document.height });
-        var koop = koopMap( mapDom );
-        koop.add(location.origin + '/github/<%= user %>/<%= repo %>/<%= file %>/FeatureServer/0');
+      $(function () {
+        $('#map').css({ width:document.width, height: document.height });
+        var koop = koopMap('map');
+        koop.add(location.origin + '<%= baseUrl %>/github/<%= user %>/<%= repo %>/<%= file %>/FeatureServer/0');
       });
     </script>
   </body>
