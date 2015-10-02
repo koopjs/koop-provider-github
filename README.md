@@ -7,7 +7,7 @@
 
 [npm-image]: https://img.shields.io/npm/v/koop-github.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/koop-github
-[travis-image]: https://img.shields.io/travis/koopjs/koop-github.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/koopjs/koop-github/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/koopjs/koop-github
 
 Take GeoJSON from a Github repository and serve it as an ArcGIS Feature Service, CSV, KML, or Shapefile.
@@ -27,36 +27,44 @@ npm install koop-github --save
 Make sure your koop configuration includes a `ghtoken` key if you need to access private repositories.
 
 ```js
-var config = {
-  'ghtoken': 'XXXXXX'
-};
+var koop = require('koop')({
+  'ghtoken': 'XXXXXX' // defaults to `process.env.KOOP_GITHUB_TOKEN`
+})
+var koopGithub = require('koop-github')
 
-var koop = require('koop')(config);
-var koopGithub = require('koop-github');
+koop.register(koopGithub)
 
-koop.register(koopGithub);
+var express = require('express')
+var app = express()
 
-var express = require('express');
-var app = express();
-
-app.use(koop);
+app.use(koop)
 
 app.listen(process.env.PORT || 1337, function () {
-  console.log("Listening at http://%s:%d/", this.address().address, this.address().port);
-});
+  console.log('Listening at http://%s:%d/', this.address().address, this.address().port)
+})
 ```
 
-Once `koop-github` is registered as provider and you've restarted your Koop server, you can preview GeoJSON files in Github repositories using this pattern:
+There is an example server in the [`example`](example) directory.
 
-`/github/{organization name}/{repository name}/{folder::path::to::geojson}/preview`
+Once `koop-github` is registered as provider and you've started your Koop server, you can preview GeoJSON files in Github repositories using this pattern:
+
+```
+/github/{organization name}/{repository name}/{folder::path::to::geojson}/preview
+```
 
 so for example:
 
-`/github/CityOfPhiladelphia/phl-open-geodata/school_facilities::philadelphiaschool_facilities201302/preview`
+```
+/github/CityOfPhiladelphia/phl-open-geodata/school_facilities::philadelphiaschool_facilities201302/preview
+```
 
-## Testing
+## Test
 
-`koop-github` uses [mocha](http://mochajs.org/) to run tests. Running `npm install` and `npm test` locally should allow you to get the test suite running without any further configuration.
+`koop-github` uses [tape](https://github.com/substack/tape) for testing. It is recommended to create your own Github [access token](https://github.com/settings/tokens) for use during testing to ensure you will not hit Github API rate limits.
+
+```
+KOOP_GITHUB_TOKEN=XXXXXX npm test
+```
 
 ## Contributing
 
