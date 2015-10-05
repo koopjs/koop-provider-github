@@ -10,8 +10,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * model: github access tokens now work as expected
 
 ### Changed
-* controller: improved API error responses ({ code: <number>, message: <string> })
+* provider: name is now `github` instead of `Github`
 * provider: `status.version` moved to `version`
+* controller: improved API error responses (`{ code: <number>, message: <string> }`)
+* controller: `controller.Error` renamed to `controller.error`
 
 ### Added
 * model: looks for `KOOP_GITHUB_TOKEN` environmental variable if `config.ghtoken` isn't specified
