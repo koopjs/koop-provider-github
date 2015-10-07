@@ -7,7 +7,7 @@ var provider = require('koop-provider')
  * @param {Object} koop - instance of koop app
  */
 var githubModel = function (koop) {
-  var model = provider.createModel(koop)
+  var model = provider.model(koop)
 
   model.config = koop.config
   model.config.ghtoken = model.config.ghtoken || process.env.KOOP_GITHUB_TOKEN || null
@@ -20,18 +20,18 @@ var githubModel = function (koop) {
   /**
    * finds an item in the cache or fetches it using geohub
    *
-   * @param  {string}   user - github username
-   * @param  {string}   repo - github repository
-   * @param  {string}   file - path to file in repo
-   * @param  {object}   options - cache options
+   * @param  {object}   options - user, repo, file, query
    * @param  {Function} callback - err, geojson
    */
-  model.find = function (user, repo, file, options, callback) {
+  model.find = function (options, callback) {
+    var user = options.user
+    var repo = options.repo
+    var file = options.file ? options.file.replace(/::/g, '/') : null
+    var query = options.query || {}
     var type = 'github'
     var key = [user, repo, file].join('/')
-    file = file ? file.replace(/::/g, '/') : null
 
-    koop.Cache.get(type, key, options, function (err, entry) {
+    koop.Cache.get(type, key, query, function (err, entry) {
       if (!err) return callback(null, entry)
 
       model.geohub.repo({
@@ -72,18 +72,19 @@ var githubModel = function (koop) {
   /**
    * drops an item from the cache
    *
-   * @param  {string}   user - github username
-   * @param  {string}   repo - github repository
-   * @param  {string}   file - path to file in repo
-   * @param  {object}   options - cache options
+   * @param  {object}   options - user, repo, file, query
    * @param  {Function} callback - err, success (boolean)
    */
-  model.drop = function (user, repo, file, options, callback) {
+  model.drop = function (options, callback) {
+    var user = options.user
+    var repo = options.repo
+    var file = options.file
+    var query = options.query || {}
     var type = 'github'
     var key = [user, repo, file].join('/')
     var dir = [type.toLowerCase(), user, repo, file].join(':')
 
-    koop.Cache.remove(type, key, options, function (err, res) {
+    koop.Cache.remove(type, key, query, function (err, res) {
       if (err) return callback(err)
       koop.files.removeDir('files/' + dir, function (err, res) {
         if (err) return callback(err)

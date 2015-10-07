@@ -10,7 +10,7 @@
     "config": "~0.4.35",
     "ejs": "~1.0.0",
     "geohub": "^1.0.2",
-    "koop-provider": "^1.0.0-alpha.2",
+    "koop-provider": "^1.0.0-beta",
     "request": "^2.64.0",
     "sphericalmercator": "~1.0.2"
   },

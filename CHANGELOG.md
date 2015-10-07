@@ -13,7 +13,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * provider: name is now `github` instead of `Github`
 * provider: `status.version` moved to `version`
 * controller: improved API error responses (`{ code: <number>, message: <string> }`)
-* controller: `controller.Error` renamed to `controller.error`
+* controller: remove `controller.Error` in favor of using `controller.errorResponse`
+* model: simplify `find` and `drop` methods (use options object)
 
 ### Added
 * model: looks for `KOOP_GITHUB_TOKEN` environmental variable if `config.ghtoken` isn't specified

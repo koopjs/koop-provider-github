@@ -11,7 +11,7 @@ var pkg = require('../package.json')
  * @param {object} model - instance of github model
  */
 function githubController (model) {
-  var controller = provider.createController()
+  var ctrl = provider.controller()
 
   /**
    * handles unspecified 404 responses
@@ -19,28 +19,11 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.notFound = function (req, res) {
-    var opts = {
+  ctrl.notFound = function (req, res) {
+    ctrl.errorResponse({
       code: 404,
       message: 'Must specify a user, repo, and file'
-    }
-
-    res.status(opts.code).json(opts)
-  }
-
-  /**
-   * handles unspecified 500 responses
-   *
-   * @param {object} req - incoming request
-   * @param {object} res - outgoing response
-   */
-  controller.error = function (req, res) {
-    var opts = {
-      code: 500,
-      message: 'Internal Server Error'
-    }
-
-    res.status(opts.code).json(opts)
+    }, res)
   }
 
   /**
@@ -49,7 +32,7 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.index = function (req, res) {
+  ctrl.index = function (req, res) {
     res.render(__dirname + '/../views/index', {
       baseUrl: req.baseUrl
     })
@@ -61,7 +44,7 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.preview = function (req, res) {
+  ctrl.preview = function (req, res) {
     req.params.file = req.params.file.replace('.geojson', '')
     res.render(__dirname + '/../views/demo', {
       user: req.params.user,
@@ -77,7 +60,7 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.rate_limit = function (req, res) {
+  ctrl.rate_limit = function (req, res) {
     var options = {
       url: 'https://api.github.com/rate_limit',
       headers: {
@@ -107,8 +90,13 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.drop = function (req, res) {
-    model.drop(req.params.user, req.params.repo, req.params.file, req.query, function (err, itemJson) {
+  ctrl.drop = function (req, res) {
+    model.drop({
+      user: req.params.user,
+      repo: req.params.repo,
+      file: req.params.file,
+      query: req.query
+    }, function (err, itemJson) {
       if (err) {
         return res.status(400).send({
           code: 400,
@@ -126,7 +114,7 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.thumbnail = function (req, res) {
+  ctrl.thumbnail = function (req, res) {
     var key = ['github', req.params.user, req.params.repo, req.params.file].join(':')
     var dir = model.cacheDir() + '/thumbs/'
 
@@ -135,33 +123,19 @@ function githubController (model) {
     req.query.f_base = dir + key + '/' + req.query.width + '::' + req.query.height
 
     function _reply (err, data) {
-      if (err) {
-        return res.status(500).json({
-          code: 500,
-          message: err.message
-        })
-      }
-
-      if (!data) return controller.error(req, res)
+      if (err) return ctrl.errorResponse({ message: err.message }, res)
+      if (!data) return ctrl.errorResponse(null, res)
 
       model.generateThumbnail(data[0], key, req.query, function (err, file) {
-        if (err) {
-          return res.status(500).json({
-            code: 500,
-            message: err.message
-          })
-        }
-
+        if (err) return ctrl.errorResponse({ message: err.message }, res)
         res.sendFile(file)
       })
     }
 
     var fileName = model.thumbnailExists(key, req.query)
-
     if (fileName) return res.sendFile(fileName)
 
     var userAndRepoExist = req.params.user && req.params.repo
-
     if (userAndRepoExist && req.params.file) {
       req.params.file = req.params.file.replace('.geojson', '')
       return model.find(req.params.user, req.params.repo, req.params.file, req.query, _reply)
@@ -171,7 +145,7 @@ function githubController (model) {
       return model.find(req.params.user, req.params.repo, null, req.query, _reply)
     }
 
-    controller.notFound(req, res)
+    ctrl.notFound(req, res)
   }
 
   /**
@@ -180,72 +154,57 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.getRepo = function (req, res) {
+  ctrl.getRepo = function (req, res) {
     // method to respond to model finds
     function _send (err, data) {
-      if (err) {
-        return res.status(500).json({
-          code: 500,
-          message: err.message
+      if (err) return ctrl.errorResponse({ message: err.message }, res)
+      if (!data) return ctrl.errorResponse(null, res)
+      if (!req.params.format) return res.json(data)
+      if (!model.files.localDir) {
+        return ctrl.errorResponse({
+          code: 501,
+          message: 'No file system configured for exporting data'
+        }, res)
+      }
+      if (req.params.format === 'png') return ctrl.thumbnail(req, res)
+
+      // change geojson to json - wat
+      req.params.format = req.params.format.replace('geojson', 'json')
+
+      var dir = ['github', req.params.user, req.params.repo, req.params.file].join(':')
+      // build the file key as an MD5 hash that's a join on the params and look for the file
+      var toHash = JSON.stringify(req.params) + JSON.stringify(req.query)
+      var key = crypto.createHash('md5').update(toHash).digest('hex')
+      var path = ['files', dir].join('/')
+      var fileName = key + '.' + req.params.format
+
+      return model.files.exists(path, fileName, function (exists, path) {
+        if (exists) {
+          if (path.substr(0, 4) === 'http') {
+            return res.redirect(path)
+          }
+          return res.sendFile(path)
+        }
+
+        model.exportToFormat(req.params.format, dir, key, data[0], {}, function (err, file) {
+          if (err) return ctrl.errorResponse({ message: err.message }, res)
+          res.sendFile(file)
         })
-      }
-
-      if (!data) return controller.error(req, res)
-
-      if (req.params.format) {
-        if (!model.files.localDir) {
-          return res.status(501).json({
-            code: 501,
-            message: 'No file system configured for exporting data'
-          })
-        }
-
-        if (req.params.format === 'png') {
-          controller.thumbnail(req, res)
-        } else {
-          // change geojson to json
-          req.params.format = req.params.format.replace('geojson', 'json')
-
-          var dir = ['github', req.params.user, req.params.repo, req.params.file].join(':')
-          // build the file key as an MD5 hash that's a join on the paams and look for the file
-          var toHash = JSON.stringify(req.params) + JSON.stringify(req.query)
-          var key = crypto.createHash('md5').update(toHash).digest('hex')
-
-          var path = ['files', dir].join('/')
-          var fileName = key + '.' + req.params.format
-
-          model.files.exists(path, fileName, function (exists, path) {
-            if (exists) {
-              if (path.substr(0, 4) === 'http') {
-                res.redirect(path)
-              } else {
-                res.sendFile(path)
-              }
-            } else {
-              model.exportToFormat(req.params.format, dir, key, data[0], {}, function (err, file) {
-                if (err) {
-                  return res.status(500).json({
-                    code: 500,
-                    message: err.message
-                  })
-                }
-
-                res.sendFile(file)
-              })
-            }
-          })
-        }
-      } else {
-        res.json(data)
-      }
+      })
     }
 
     if (req.params.user && req.params.repo && req.params.file) {
+      // argh
       req.params.file = req.params.file.replace('.geojson', '')
-      return model.find(req.params.user, req.params.repo, req.params.file, req.query, _send)
+      return model.find({
+        user: req.params.user,
+        repo: req.params.repo,
+        file: req.params.file,
+        query: req.query
+      }, _send)
     }
 
-    controller.notFound(req, res)
+    ctrl.notFound(req, res)
   }
 
   /**
@@ -257,34 +216,28 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.featureservice = function (req, res) {
+  ctrl.featureservice = function (req, res) {
     var userAndRepoExist = req.params.user && req.params.repo
-
-    // yuck
-    var callback = req.query.callback
-    delete req.query.callback
-
-    if (!userAndRepoExist) return controller.notFound(req, res)
+    if (!userAndRepoExist) return ctrl.notFound(req, res)
 
     if (req.params.file) {
       // ew
       req.params.file = req.params.file.replace('.geojson', '')
-
-      return model.find(req.params.user, req.params.repo, req.params.file, req.query, function (err, data) {
-        // no
-        delete req.query.geometry
-        delete req.query.where
-
-        controller.processFeatureServer(req, res, err, data, callback)
-      })
     }
 
-    return model.find(req.params.user, req.params.repo, null, req.query, function (err, data) {
-      // why
+    return model.find({
+      user: req.params.user,
+      repo: req.params.repo,
+      file: req.params.file || null,
+      query: req.query
+    }, function (err, data) {
+      if (err) return ctrl.errorResponse({ message: err.message }, res)
+
+      // grumble
       delete req.query.geometry
       delete req.query.where
 
-      controller.processFeatureServer(req, res, err, data, callback)
+      ctrl.processFeatureServer(req, res, data)
     })
   }
 
@@ -296,27 +249,23 @@ function githubController (model) {
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
    */
-  controller.tiles = function (req, res) {
+  ctrl.tiles = function (req, res) {
     if (!model.files.localDir) {
-      return res.status(501).json({
+      return ctrl.errorResponse({
         code: 501,
-        message: 'Local Filesystem not configured. Please add a "data_dir" to the server config to support tiles'
-      })
+        message: 'Local filesystem not configured. Please add "data_dir" property to koop config to support tiles'
+      }, res)
     }
-
-    // aaugh
-    var callback = req.query.callback
-    delete req.query.callback
 
     var layer = req.params.layer || 0
     var file, jsonFile, key
 
     function _send (err, data) {
       if (err) {
-        return res.status(400).json({
+        return ctrl.errorResponse({
           code: 400,
           message: err.message
-        })
+        }, res)
       }
 
       req.params.key = key + ':' + layer
@@ -329,31 +278,23 @@ function githubController (model) {
 
       model.tileGet(req.params, data[layer], function (err, tile) {
         if (err) {
-          var opts = {
+          return ctrl.errorResponse({
             code: err.code || 500,
             message: err.message || 'Unknown error while creating the tile'
-          }
-
-          return res.status(opts.code).json(opts)
+          }, res)
         }
 
         if (req.params.format === 'pbf') {
           res.setHeader('content-encoding', 'deflate')
         }
 
-        if (req.params.format === 'png' || req.params.format === 'pbf') {
+        if (req.params.format === 'png' ||
+            req.params.format === 'pbf' ||
+            typeof tile === 'string') {
           return res.sendFile(tile)
         }
 
-        if (callback) {
-          res.send(callback + '(' + JSON.stringify(tile) + ')')
-        } else {
-          if (typeof tile === 'string') {
-            res.sendFile(tile)
-          } else {
-            res.json(tile)
-          }
-        }
+        res.jsonp(tile)
       })
     }
 
@@ -386,11 +327,7 @@ function githubController (model) {
 
           var json = JSON.parse(data)
 
-          if (callback) {
-            res.send(callback + '(' + JSON.stringify(json) + ')')
-          } else {
-            res.json(json)
-          }
+          res.jsonp(json)
         })
       }
     }
@@ -435,14 +372,14 @@ function githubController (model) {
         _sendImmediate(file)
       }
     } else {
-      res.status(404).json({
+      ctrl.errorResponse({
         code: 404,
         message: 'Must specify at least a user and a repo'
-      })
+      }, res)
     }
   }
 
-  return controller
+  return ctrl
 }
 
 module.exports = githubController

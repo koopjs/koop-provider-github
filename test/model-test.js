@@ -34,7 +34,12 @@ test('model: setup', function (t) {
 })
 
 test('model: caching a file from github', function (t) {
-  github.find(user, repo, file, {}, function (err, data) {
+  github.find({
+    user: user,
+    repo: repo,
+    file: file,
+    query: null
+  }, function (err, data) {
     t.error(err, 'does not error')
     t.ok(koop.Cache.get.called, 'called get')
     t.ok(koop.Cache.insert.called, 'called insert')
