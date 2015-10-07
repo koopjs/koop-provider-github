@@ -74,13 +74,13 @@ function githubController (model) {
 
     request(options, function (err, response, body) {
       if (err) {
-        return res.status(response.statusCode).json({
+        return ctrl.errorResponse({
           code: response.statusCode,
           message: err.message
-        })
+        }, res)
       }
 
-      res.json(JSON.parse(body))
+      res.jsonp(JSON.parse(body))
     })
   }
 
@@ -104,7 +104,7 @@ function githubController (model) {
         })
       }
 
-      res.json(itemJson)
+      res.jsonp(itemJson)
     })
   }
 
@@ -119,7 +119,7 @@ function githubController (model) {
     function _send (err, data) {
       if (err) return ctrl.errorResponse({ message: err.message }, res)
       if (!data) return ctrl.errorResponse(null, res)
-      if (!req.params.format) return res.json(data)
+      if (!req.params.format) return res.jsonp(data)
       if (!model.files.localDir) {
         return ctrl.errorResponse({
           code: 501,
@@ -278,21 +278,14 @@ function githubController (model) {
       }
 
       if (req.params.format === 'png' || req.params.format === 'pbf') {
-        res.sendFile(file)
-      } else {
-        fs.readFile(file, function (err, data) {
-          if (err) {
-            return res.status(500).json({
-              code: 500,
-              message: err.message
-            })
-          }
-
-          var json = JSON.parse(data)
-
-          res.jsonp(json)
-        })
+        return res.sendFile(file)
       }
+
+      fs.readFile(file, function (err, data) {
+        if (err) return ctrl.errorResponse({ message: err.message }, res)
+        var json = JSON.parse(data)
+        res.jsonp(json)
+      })
     }
 
     if (req.params.user && req.params.repo && req.params.file) {

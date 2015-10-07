@@ -18,6 +18,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 * model: looks for `KOOP_GITHUB_TOKEN` environmental variable if `config.ghtoken` isn't specified
 * controller/routes: added `rate_limit` route for checking github rate limit status
+* controller: support for JSONP callbacks ([`res.jsonp`](http://expressjs.com/api.html#res.jsonp))
 
 ### Removed
 * controller/routes: thumbnail (Thumbnail generation no longer supported)
