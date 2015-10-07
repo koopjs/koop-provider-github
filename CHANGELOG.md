@@ -12,8 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 * provider: name is now `github` instead of `Github`
 * provider: `status.version` moved to `version`
-* controller: improved API error responses (`{ code: <number>, message: <string> }`)
-* controller: remove `controller.Error` in favor of using `controller.errorResponse`
+* controller: removed `ctrl.Error`, using `koop-provider`'s `ctrl.errorResponse` method
 * model: simplify `find` and `drop` methods (use options object)
 
 ### Added
@@ -21,7 +20,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * controller/routes: added `rate_limit` route for checking github rate limit status
 
 ### Removed
-* Removed thumbnail route (Thumbnail generation no longer supported)
+* controller/routes: thumbnail (Thumbnail generation no longer supported)
 
 ## [1.0.1] - 2015-08-13
 
