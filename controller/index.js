@@ -109,46 +109,6 @@ function githubController (model) {
   }
 
   /**
-   * handles requests for thumbnail images
-   *
-   * @param {object} req - incoming request
-   * @param {object} res - outgoing response
-   */
-  ctrl.thumbnail = function (req, res) {
-    var key = ['github', req.params.user, req.params.repo, req.params.file].join(':')
-    var dir = model.cacheDir() + '/thumbs/'
-
-    req.query.width = parseInt(req.query.width, 10) || 150
-    req.query.height = parseInt(req.query.height, 10) || 150
-    req.query.f_base = dir + key + '/' + req.query.width + '::' + req.query.height
-
-    function _reply (err, data) {
-      if (err) return ctrl.errorResponse({ message: err.message }, res)
-      if (!data) return ctrl.errorResponse(null, res)
-
-      model.generateThumbnail(data[0], key, req.query, function (err, file) {
-        if (err) return ctrl.errorResponse({ message: err.message }, res)
-        res.sendFile(file)
-      })
-    }
-
-    var fileName = model.thumbnailExists(key, req.query)
-    if (fileName) return res.sendFile(fileName)
-
-    var userAndRepoExist = req.params.user && req.params.repo
-    if (userAndRepoExist && req.params.file) {
-      req.params.file = req.params.file.replace('.geojson', '')
-      return model.find(req.params.user, req.params.repo, req.params.file, req.query, _reply)
-    }
-
-    if (userAndRepoExist && req.query) {
-      return model.find(req.params.user, req.params.repo, null, req.query, _reply)
-    }
-
-    ctrl.notFound(req, res)
-  }
-
-  /**
    * returns geojson for a specific user/repo/file path
    *
    * @param {object} req - incoming request
@@ -166,7 +126,10 @@ function githubController (model) {
           message: 'No file system configured for exporting data'
         }, res)
       }
-      if (req.params.format === 'png') return ctrl.thumbnail(req, res)
+
+      if (req.params.format === 'png') {
+        return ctrl.errorResponse({ message: 'Thumbnail generation no longer supported' }, res)
+      }
 
       // change geojson to json - wat
       req.params.format = req.params.format.replace('geojson', 'json')
@@ -228,7 +191,7 @@ function githubController (model) {
     return model.find({
       user: req.params.user,
       repo: req.params.repo,
-      file: req.params.file || null,
+      file: req.params.file,
       query: req.query
     }, function (err, data) {
       if (err) return ctrl.errorResponse({ message: err.message }, res)

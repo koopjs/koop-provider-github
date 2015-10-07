@@ -20,6 +20,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * model: looks for `KOOP_GITHUB_TOKEN` environmental variable if `config.ghtoken` isn't specified
 * controller/routes: added `rate_limit` route for checking github rate limit status
 
+### Removed
+* Removed thumbnail route (Thumbnail generation no longer supported)
+
 ## [1.0.1] - 2015-08-13
 
 ### Changed
