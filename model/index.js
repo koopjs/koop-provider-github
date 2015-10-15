@@ -1,3 +1,4 @@
+var debug = require('debug')('koop:github:model')
 var geohub = require('geohub')
 var provider = require('koop-provider')
 
@@ -32,7 +33,12 @@ var githubModel = function (koop) {
     var key = [user, repo, file].join('/')
 
     koop.Cache.get(type, key, query, function (err, entry) {
-      if (!err) return callback(null, entry)
+      if (!err) {
+        debug('retrieved data from cache', options)
+        return callback(null, entry)
+      }
+
+      debug('fetching data from Github API (cache error: %s)', err.message, options)
 
       model.geohub.repo({
         user: user,

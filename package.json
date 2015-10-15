@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "config": "~0.4.35",
+    "debug": "^2.2.0",
     "ejs": "~1.0.0",
     "geohub": "^1.0.2",
     "koop-provider": "^1.0.0-beta",

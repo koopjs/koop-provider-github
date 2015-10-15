@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Added
+* **model**: debug information for github api and koop cache
+* **example**: updates based on koop-gist example server
+
 ## [2.0.0-alpha] - 2015-10-15
 
 ### Fixed
