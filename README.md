@@ -24,7 +24,7 @@ npm install koop-github --save
 
 ## Usage
 
-Make sure your koop configuration includes a `ghtoken` key if you need to access private repositories.
+Make sure your koop configuration includes a github access token (`ghtoken` in the config object passed to koop or `KOOP_GITHUB_TOKEN` as an environmental variable). Your Github API requests will be rate limited and you will not have access private gists if you don't include a token.
 
 ```js
 var koop = require('koop')({
