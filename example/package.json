@@ -4,9 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "express": "^4.0.0",
-    "koop": "^2.0.0",
-    "koop-github": "^1.0.0",
-    "koop-pgcache": "^1.0.0"
+    "koop": "^2.0.0"
   },
   "license": "ISC",
   "main": "index.js",

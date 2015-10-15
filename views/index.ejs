@@ -52,7 +52,7 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
-    <script type="text/javascript" src="/js/map.js"></script>
+    <script type="text/javascript" src="<%= baseUrl %>/js/map.js"></script>
 
     <div id="map"></div>
       <div class="load-form">
@@ -62,24 +62,23 @@
 
     <script>
 
-      function load(){
+      function load () {
         var val = document.getElementById('github').value.split('/');
         var user = val.shift();
         var repo = val.shift();
-        if ( val.length > 1){
+        if (val.length > 1) {
           var path = val.join('::');
         } else {
           var path = val[0];
         }
-        if ( user && repo && path ) {
-          location.href = '/github/' + [ user, repo, path ].join('/') + '/preview';
+        if (user && repo && path) {
+          location.href = '<%= baseUrl %>/github/' + [ user, repo, path ].join('/') + '/preview';
         }
       }
 
-      $(function(){
-        var mapDom = 'map';
-        $('#'+mapDom).css({ width:document.width, height: document.height });
-        var koop = koopMap( mapDom );
+      $(function () {
+        $('#map').css({ width:document.width, height: document.height });
+        var koop = koopMap('map');
       });
 
     </script>

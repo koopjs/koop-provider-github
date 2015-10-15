@@ -1,13 +1,12 @@
-var pkg = require('./package')
+var pkg = require('./package.json')
+var provider = require('koop-provider')
 
-var provider = {
-  name: 'Github',
-  model: require('./models/Github'),
+var github = provider({
+  name: 'github',
+  version: pkg.version,
+  model: require('./model'),
   controller: require('./controller'),
-  routes: require('./routes'),
-  status: {
-    version: pkg.version
-  }
-}
+  routes: require('./routes')
+})
 
-module.exports = provider
+module.exports = github

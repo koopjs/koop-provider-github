@@ -4,9 +4,10 @@ var koop = require('koop')({
   data_dir: __dirname + '/output/'
 })
 var kooplib = require('koop/lib')
-var provider = require('../index.js')
-var model = new provider.model(kooplib) // eslint-disable-line
-var controller = new provider.controller(model, kooplib.BaseController) // eslint-disable-line
+var provider = require('../')
+var model = provider.model(kooplib)
+var controller = provider.controller(model, kooplib.BaseController)
+
 koop._bindRoutes(provider.routes, controller)
 
 test('routes: invalid URL', function (t) {
@@ -45,6 +46,7 @@ test('routes: feature server index', function (t) {
     .end(function (err, res) {
       t.error(err, 'does not error')
       t.equal(res.statusCode, 200, 'returns 200 status code')
+      t.ok(res.body.layers, 'response has layers')
       t.end()
     })
 })
@@ -55,6 +57,7 @@ test('routes: feauture server 0', function (t) {
     .end(function (err, res) {
       t.error(err, 'does not error')
       t.equal(res.statusCode, 200, 'returns 200 status code')
+      t.ok(res.body.fields, 'response has fields')
       t.end()
     })
 })
@@ -65,6 +68,7 @@ test('routes: feature server 0 query', function (t) {
     .end(function (err, res) {
       t.error(err, 'does not error')
       t.equal(res.statusCode, 200, 'returns 200 status code')
+      t.ok(res.body.fields, 'response has fields')
       t.end()
     })
 })

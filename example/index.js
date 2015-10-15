@@ -3,20 +3,19 @@ var koop = require('koop')({
   'db': {
     'conn': 'postgres://localhost/koopdev'
   },
-  'ghtoken': process.env.KOOP_GHTOKEN
+  'ghtoken': process.env.KOOP_GITHUB_TOKEN
 })
-var github = require('koop-github')
-var pgCache = require('koop-pgcache')
+var github = require('../')
 
 koop.register(github)
-koop.registerCache(pgCache)
 
-app.use(koop)
+app.set('json spaces', 2)
+app.use('/koop/', koop)
 
 app.get('/', function (req, res) {
-  res.redirect('/github')
+  res.redirect('/koop/github')
 })
 
 app.listen(process.env.PORT || 1337, function () {
-  console.log('Koop server listening at %d', this.address().port)
+  console.log('Koop Github example server listening at %d', this.address().port)
 })

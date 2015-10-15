@@ -1,6 +1,6 @@
 {
   "name": "koop-github",
-  "description": "A Github provider for Koop",
+  "description": "Github provider for Koop",
   "version": "1.0.1",
   "author": "Chris Helm",
   "bugs": {
@@ -9,14 +9,16 @@
   "dependencies": {
     "config": "~0.4.35",
     "ejs": "~1.0.0",
-    "geohub": "0.3.2",
+    "geohub": "^1.0.2",
+    "koop-provider": "^1.0.0-beta",
+    "request": "^2.64.0",
     "sphericalmercator": "~1.0.2"
   },
   "devDependencies": {
-    "koop": "2.x",
+    "koop": "^2.9.2",
     "sinon": "^1.15.4",
-    "standard": "*",
-    "supertest": "~0.11.0",
+    "standard": "^5.3.1",
+    "supertest": "^1.1.0",
     "tap-spec": "^4.0.2",
     "tape": "^4.0.1"
   },
