@@ -1,7 +1,7 @@
 {
   "name": "koop-github",
   "description": "Github provider for Koop",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0",
   "author": "Chris Helm",
   "bugs": {
     "url": "https://github.com/koopjs/koop-github/issues"
@@ -11,7 +11,7 @@
     "debug": "^2.2.0",
     "ejs": "~1.0.0",
     "geohub": "^1.0.2",
-    "koop-provider": "^1.0.0-beta",
+    "koop-provider": "^1.0.0",
     "request": "^2.64.0",
     "sphericalmercator": "~1.0.2"
   },
