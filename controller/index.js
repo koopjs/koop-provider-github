@@ -306,11 +306,11 @@ function githubController (model) {
         var factor = 0.35
         req.query.simplify = ((Math.abs(req.query.geometry.xmin - req.query.geometry.xmax)) / 256) * factor
         model.find({
-        user: req.params.user,
-        repo: req.params.repo,
-        file: req.params.file,
-        query: req.query
-      }, _send)
+          user: req.params.user,
+          repo: req.params.repo,
+          file: req.params.file,
+          query: req.query
+        }, _send)
       } else {
         _sendImmediate(file)
       }
@@ -329,11 +329,11 @@ function githubController (model) {
         _send(null, fs.readFileSync(jsonFile))
       } else if (!fs.existsSync(file)) {
         model.find({
-        user: req.params.user,
-        repo: req.params.repo,
-        file: req.params.file,
-        query: req.query
-      }, _send)
+          user: req.params.user,
+          repo: req.params.repo,
+          file: req.params.file,
+          query: req.query
+        }, _send)
       } else {
         _sendImmediate(file)
       }
