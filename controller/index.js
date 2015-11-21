@@ -1,6 +1,7 @@
 var fs = require('fs')
 var crypto = require('crypto')
-var merc = require('sphericalmercator')({ size: 256 })
+var Sm = require('sphericalmercator')
+var merc = new Sm({size: 256})
 var provider = require('koop-provider')
 var request = require('request')
 var pkg = require('../package.json')
@@ -207,7 +208,6 @@ function githubController (model) {
   /**
    * handles tile requests
    *
-   * TODO: refactor/remove... does this even work?
    *
    * @param {object} req - incoming request
    * @param {object} res - outgoing response
@@ -301,11 +301,16 @@ function githubController (model) {
 
       // if the json file alreadty exists, dont hit the db, just send the data
       if (fs.existsSync(jsonFile) && !fs.existsSync(file)) {
-        _send(null, fs.readFileSync(jsonFile))
+        _send(null, [JSON.parse(fs.readFileSync(jsonFile))])
       } else if (!fs.existsSync(file)) {
         var factor = 0.35
         req.query.simplify = ((Math.abs(req.query.geometry.xmin - req.query.geometry.xmax)) / 256) * factor
-        model.find(req.params.user, req.params.repo, req.params.file, req.query, _send)
+        model.find({
+          user: req.params.user,
+          repo: req.params.repo,
+          file: req.params.file,
+          query: req.query
+        }, _send)
       } else {
         _sendImmediate(file)
       }
@@ -323,7 +328,12 @@ function githubController (model) {
       if (fs.existsSync(jsonFile) && !fs.existsSync(file)) {
         _send(null, fs.readFileSync(jsonFile))
       } else if (!fs.existsSync(file)) {
-        model.find(req.params.user, req.params.repo, req.params.file, req.query, _send)
+        model.find({
+          user: req.params.user,
+          repo: req.params.repo,
+          file: req.params.file,
+          query: req.query
+        }, _send)
       } else {
         _sendImmediate(file)
       }
