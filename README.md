@@ -46,7 +46,7 @@ app.listen(process.env.PORT || 1337, function () {
 
 There is an example server in the [`example`](example) directory.
 
-Once `koop-github` is registered as provider and you've started your Koop server, you can preview GeoJSON files in Github repositories using this pattern:
+Once `koop-github` is registered as provider and you've started your Koop server, you can preview GeoJSON files in Github repositories using this pattern.  Note that the path within the repo uses `::` as a directory separator:
 
 ```
 /github/{organization name}/{repository name}/{folder::path::to::geojson}/preview
