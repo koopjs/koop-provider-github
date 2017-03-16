@@ -5,9 +5,10 @@ var createGithubModel = require('../model')
 var repo = 'geodata'
 var user = 'chelm'
 var file = 'co-river-basin'
+var path = require('path')
 
 koop.config = {
-  data_dir: __dirname + '/output/'
+  data_dir: path.join(__dirname, '/output/')
 }
 
 koop.log = new koop.Logger({})

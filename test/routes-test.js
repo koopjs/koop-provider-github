@@ -1,7 +1,8 @@
 var test = require('tape')
 var request = require('supertest')
+var path = require('path')
 var koop = require('koop')({
-  data_dir: __dirname + '/output/'
+  data_dir: path.join(__dirname, '/output/')
 })
 var kooplib = require('koop/lib')
 var provider = require('../')
