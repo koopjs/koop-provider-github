@@ -7,8 +7,8 @@
 
 [npm-image]: https://img.shields.io/npm/v/koop-github.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/koop-github
-[travis-image]: https://img.shields.io/travis/koopjs/koop-github/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/koopjs/koop-github
+[travis-image]: https://travis-ci.org/koopjs/koop-provider-github.svg?branch=master
+[travis-url]: https://travis-ci.org/koopjs/koop-provider-github
 
 Take GeoJSON from a Github repository and serve it as an ArcGIS Feature Service, CSV, KML, or Shapefile.
 
