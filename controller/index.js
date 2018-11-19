@@ -1,7 +1,8 @@
 var fs = require('fs')
+const path = require('path')
 var crypto = require('crypto')
 var Sm = require('sphericalmercator')
-var merc = new Sm({size: 256})
+var merc = new Sm({ size: 256 })
 var provider = require('koop-provider')
 var request = require('request')
 var pkg = require('../package.json')
@@ -34,7 +35,7 @@ function githubController (model) {
    * @param {object} res - outgoing response
    */
   ctrl.index = function (req, res) {
-    res.render(__dirname + '/../views/index', {
+    res.render(path.join(__dirname, '/../views/index'), {
       baseUrl: req.baseUrl
     })
   }
@@ -47,7 +48,7 @@ function githubController (model) {
    */
   ctrl.preview = function (req, res) {
     req.params.file = req.params.file.replace('.geojson', '')
-    res.render(__dirname + '/../views/demo', {
+    res.render(path.join(__dirname, '/../views/demo'), {
       user: req.params.user,
       repo: req.params.repo,
       file: req.params.file,

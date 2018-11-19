@@ -1,56 +1,31 @@
-var test = require('tape')
-var sinon = require('sinon')
-var koop = require('koop/lib')
-var createGithubModel = require('../model')
-var repo = 'geodata'
-var user = 'chelm'
-var file = 'co-river-basin'
+const test = require('tape')
+const Model = require('../model')
+const model = new Model()
+const nock = require('nock')
 
-koop.config = {
-  data_dir: __dirname + '/output/'
-}
+test('should properly fetch from the API and translate features', t => {
+  t.plan(7)
 
-koop.log = new koop.Logger({})
-koop.Cache = new koop.DataCache(koop)
-koop.Cache.db = koop.LocalDB
-koop.Cache.db.log = koop.log
+  const featureCollection = require('./fixtures/raw.json')
+  nock('https://api.github.com')
+    .get('/repos/test-org/geodata/contents/?ref=master')
+    .reply(200, JSON.stringify(require('./fixtures/contents.json')))
 
-var github = createGithubModel(koop)
+  nock('https://api.github.com')
+    .get('/repos/test-org/geodata/contents/map.geojson?ref=master')
+    .reply(200, JSON.stringify(require('./fixtures/api.json')))
 
-test('model: setup', function (t) {
-  sinon.stub(github.geohub, 'repo', function (options, callback) {
-    callback(null, {})
+  nock('https://raw.github.com')
+    .get('/test-org/geodata/master/map.geojson?ref=master')
+    .reply(200, JSON.stringify(featureCollection))
+
+  model.getData({ params: { id: 'test-org::geodata::map' } }, (err, geojson) => {
+    t.notOk(err, 'no error')
+    t.deepEquals(geojson.features, featureCollection.features, 'features found')
+    t.ok(geojson.metadata, 'metdata added')
+    t.equals(geojson.metadata.title, 'map', 'set metadata title')
+    t.equals(geojson.metadata.name, 'map', 'set metadata name')
+    t.equals(geojson.metadata.description, `GeoJSON from https://raw.github.com/test-org/geodata/master/map.geojson`, 'set metadata description')
+    t.equals(geojson.metadata.geometryType, 'Point', 'set metadata geometry')
   })
-
-  sinon.stub(koop.Cache, 'get', function (type, id, options, callback) {
-    callback(true)
-  })
-
-  sinon.stub(koop.Cache, 'insert', function (type, id, geojson, layer, callback) {
-    callback(null, true)
-  })
-
-  t.end()
-})
-
-test('model: caching a file from github', function (t) {
-  github.find({
-    user: user,
-    repo: repo,
-    file: file,
-    query: null
-  }, function (err, data) {
-    t.error(err, 'does not error')
-    t.ok(koop.Cache.get.called, 'called get')
-    t.ok(koop.Cache.insert.called, 'called insert')
-    t.ok(github.geohub.repo.called, 'called geohub.repo')
-    t.end()
-  })
-})
-
-test('model: teardown', function (t) {
-  koop.Cache.get.restore()
-  koop.Cache.insert.restore()
-  github.geohub.repo.restore()
-  t.end()
 })
