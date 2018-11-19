@@ -49,21 +49,21 @@ There is an example server in the [`example`](example) directory.
 Once `koop-github` is registered as provider and you've started your Koop server, you can preview GeoJSON files in Github repositories using this pattern.  Note that the path within the repo uses `::` as a directory separator:
 
 ```
-/github/{organization name}/{repository name}/{folder::path::to::geojson}/preview
+/github/{organization name}::{repository name}::{folder::path::to::geojson}/FeatureServer/0/query
 ```
 
 so for example:
 
 ```
-/github/CityOfPhiladelphia/phl-open-geodata/school_facilities::philadelphiaschool_facilities201302/preview
+http://localhost:1338/github/koopjs::geodata::countries::mexico/FeatureServer/0/query
 ```
 
 ## Test
 
-`koop-github` uses [tape](https://github.com/substack/tape) for testing. It is recommended to create your own Github [access token](https://github.com/settings/tokens) for use during testing to ensure you will not hit Github API rate limits.
+`koop-github` uses [tape](https://github.com/substack/tape) for testing.
 
 ```
-KOOP_GITHUB_TOKEN=XXXXXX npm test
+npm test
 ```
 
 ## Contributing
