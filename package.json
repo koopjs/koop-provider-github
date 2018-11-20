@@ -8,16 +8,11 @@
   },
   "dependencies": {
     "config": "^2.0.1",
-    "debug": "^2.2.0",
-    "ejs": ">=2.5.5",
-    "geohub": "^1.0.4",
-    "request": "^2.88.0",
-    "sphericalmercator": "~1.0.2"
+    "geohub": "^1.0.4"
   },
   "devDependencies": {
     "koop": "^3.10.1",
     "nock": "^10.0.2",
-    "sinon": "^7.1.1",
     "standard": "^12.0.1",
     "supertest": "^3.3.0",
     "tap-spec": "^5.0.0",
