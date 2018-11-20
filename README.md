@@ -9,8 +9,8 @@
 
 [npm-image]: https://img.shields.io/npm/v/koop-github.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/koop-github
-[travis-image]: https://img.shields.io/travis/koopjs/koop-github/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/koopjs/koop-github
+[travis-image]: https://travis-ci.org/koopjs/koop-provider-github.svg?branch=master
+[travis-url]: https://travis-ci.org/koopjs/koop-provider-github
 
 Take GeoJSON from a Github repository and serve it as an ArcGIS Feature Service, CSV, KML, or Shapefile.
 
@@ -21,7 +21,7 @@ Koop providers require that you first install Koop. For information on using Koo
 You can add `koop-github` to your Koop server's dependencies by installing it with npm and adding it to your package.json like so:
 
 ```
-npm install koop-github --save
+npm install @koopjs/provider-github --save
 ```
 
 ## Usage
@@ -32,40 +32,33 @@ Make sure your koop configuration includes a github access token (`ghtoken` in t
 var koop = require('koop')({
   'ghtoken': 'XXXXXX' // defaults to `process.env.KOOP_GITHUB_TOKEN`
 })
-var koopGithub = require('koop-github')
+var koopGithub = require('@koopjs/provider-github')
 
 koop.register(koopGithub)
 
-var express = require('express')
-var app = express()
-
-app.use(koop)
-
-app.listen(process.env.PORT || 1337, function () {
+koop.server.listen(1338, function () {
   console.log('Listening at http://%s:%d/', this.address().address, this.address().port)
 })
 ```
 
-There is an example server in the [`example`](example) directory.
-
-Once `koop-github` is registered as provider and you've started your Koop server, you can preview GeoJSON files in Github repositories using this pattern.  Note that the path within the repo uses `::` as a directory separator:
+Once `koop-github` is registered as provider and you've started your Koop server, you can request GeoJSON files in Github repositories using this pattern.  Note that the path within the repo uses `::` as a directory separator:
 
 ```
-/github/{organization name}/{repository name}/{folder::path::to::geojson}/preview
+/github/{organization name}::{repository name}::{folder::path::to::geojson}/FeatureServer/0/query
 ```
 
 so for example:
 
 ```
-/github/CityOfPhiladelphia/phl-open-geodata/school_facilities::philadelphiaschool_facilities201302/preview
+http://localhost:1338/github/koopjs::geodata::countries::mexico/FeatureServer/0/query
 ```
 
 ## Test
 
-`koop-github` uses [tape](https://github.com/substack/tape) for testing. It is recommended to create your own Github [access token](https://github.com/settings/tokens) for use during testing to ensure you will not hit Github API rate limits.
+`koop-github` uses [tape](https://github.com/substack/tape) for testing.
 
 ```
-KOOP_GITHUB_TOKEN=XXXXXX npm test
+npm test
 ```
 
 ## Contributing

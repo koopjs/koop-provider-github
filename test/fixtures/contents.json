@@ -1,0 +1,18 @@
+[  
+  {  
+     "name":"map.geojson",
+     "path":"map.geojson",
+     "sha":"6978b3c6e6b5b5b065c02b2e371962dfa9410118",
+     "size":128,
+     "url":"https://api.github.com/repos/test-org/geodata/contents/map.geojson?ref=master",
+     "html_url":"https://github.com/test-org/geodata/blob/master/map.geojson",
+     "git_url":"https://api.github.com/repos/test-org/geodata/git/blobs/6978b3c6e6b5b5b065c02b2e371962dfa9410118",
+     "download_url":"https://raw.githubusercontent.com/test-org/geodata/master/map.geojson",
+     "type":"file",
+     "_links":{  
+        "self":"https://api.github.com/repos/test-org/geodata/contents/map.geojson?ref=master",
+        "git":"https://api.github.com/repos/test-org/geodata/git/blobs/6978b3c6e6b5b5b065c02b2e371962dfa9410118",
+        "html":"https://github.com/test-org/geodata/blob/master/map.geojson"
+     }
+  }
+]

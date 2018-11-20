@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2018-11-20
+### Changed
+* upgrade to support Koop 3.X
+
 ## [2.0.0] - 2015-10-23
 
 Stable Release!
@@ -62,6 +66,7 @@ Stable Release!
 
 ## v0.1.12 - 2015-03-16
 
+[3.0.0]: https://github.com/koopjs/koop-github/compare/v2.0.0...v3.0.0
 [2.0.0]: https://github.com/koopjs/koop-github/compare/v2.0.0-alpha...v2.0.0
 [2.0.0-alpha]: https://github.com/koopjs/koop-github/compare/v1.0.1...v2.0.0-alpha
 [1.0.1]: https://github.com/koopjs/koop-github/compare/v1.0.0...v1.0.1
