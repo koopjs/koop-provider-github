@@ -19,7 +19,7 @@ Koop providers require that you first install Koop. For information on using Koo
 You can add `koop-github` to your Koop server's dependencies by installing it with npm and adding it to your package.json like so:
 
 ```
-npm install koop-github --save
+npm install @koopjs/provider-github --save
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ Make sure your koop configuration includes a github access token (`ghtoken` in t
 var koop = require('koop')({
   'ghtoken': 'XXXXXX' // defaults to `process.env.KOOP_GITHUB_TOKEN`
 })
-var koopGithub = require('koop-github')
+var koopGithub = require('@koopjs/provider-github')
 
 koop.register(koopGithub)
 
