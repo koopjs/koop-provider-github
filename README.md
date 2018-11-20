@@ -1,5 +1,7 @@
 # koop-github
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/koopjs/koop-provider-github.svg)](https://greenkeeper.io/)
+
 > Github provider for [Koop](https://github.com/koopjs/koop)
 
 [![npm][npm-image]][npm-url]
