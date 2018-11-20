@@ -34,19 +34,12 @@ var koopGithub = require('koop-github')
 
 koop.register(koopGithub)
 
-var express = require('express')
-var app = express()
-
-app.use(koop)
-
-app.listen(process.env.PORT || 1337, function () {
+koop.server.listen(1338, function () {
   console.log('Listening at http://%s:%d/', this.address().address, this.address().port)
 })
 ```
 
-There is an example server in the [`example`](example) directory.
-
-Once `koop-github` is registered as provider and you've started your Koop server, you can preview GeoJSON files in Github repositories using this pattern.  Note that the path within the repo uses `::` as a directory separator:
+Once `koop-github` is registered as provider and you've started your Koop server, you can request GeoJSON files in Github repositories using this pattern.  Note that the path within the repo uses `::` as a directory separator:
 
 ```
 /github/{organization name}::{repository name}::{folder::path::to::geojson}/FeatureServer/0/query
