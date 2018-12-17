@@ -7,7 +7,7 @@
     "url": "https://github.com/koopjs/koop-provider-github/issues"
   },
   "dependencies": {
-    "config": "^2.0.1",
+    "config": "^3.0.1",
     "geohub": "^1.0.4"
   },
   "devDependencies": {
