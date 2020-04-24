@@ -14,7 +14,7 @@
     "nock": "^10.0.2",
     "standard": "^12.0.1",
     "tap-spec": "^5.0.0",
-    "tape": "^4.9.1"
+    "tape": "^5.0.0"
   },
   "homepage": "https://github.com/koopjs/koop-provider-github",
   "keywords": [
